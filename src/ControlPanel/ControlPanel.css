@@ -1,0 +1,7 @@
+#ControlPanel {
+  position: absolute;
+  left: 5px;
+  top: 5px;
+  width: 400px;
+  height: 250px;
+}
