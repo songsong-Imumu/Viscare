@@ -1,0 +1,283 @@
+{
+    "type": "FeatureCollection",
+    "features": [{
+        "type": "Feature",
+        "propertise": {
+            "name": "\u5317\u4eac"
+        },
+        "geometry": {
+            "type": "Point",
+            "coordinates": [116.28, 39.6]
+        }
+    }, {
+        "type": "Feature",
+        "propertise": {
+            "name": "\u4e0a\u6d77"
+        },
+        "geometry": {
+            "type": "Point",
+            "coordinates": [121.29, 31.14]
+        }
+    }, {
+        "type": "Feature",
+        "propertise": {
+            "name": "\u5929\u6d25"
+        },
+        "geometry": {
+            "type": "Point",
+            "coordinates": [117.11, 39.09]
+        }
+    }, {
+        "type": "Feature",
+        "propertise": {
+            "name": "\u91cd\u5e86"
+        },
+        "geometry": {
+            "type": "Point",
+            "coordinates": [106.32, 29.32]
+        }
+    }, {
+        "type": "Feature",
+        "propertise": {
+            "name": "\u9ed1\u9f99\u6c5f"
+        },
+        "geometry": {
+            "type": "Point",
+            "coordinates": [126.41, 45.45]
+        }
+    }, {
+        "type": "Feature",
+        "propertise": {
+            "name": "\u5409\u6797"
+        },
+        "geometry": {
+            "type": "Point",
+            "coordinates": [125.19, 43.52]
+        }
+    }, {
+        "type": "Feature",
+        "propertise": {
+            "name": "\u8fbd\u5b81"
+        },
+        "geometry": {
+            "type": "Point",
+            "coordinates": [123.24, 41.5]
+        }
+    }, {
+        "type": "Feature",
+        "propertise": {
+            "name": "\u5185\u8499\u53e4"
+        },
+        "geometry": {
+            "type": "Point",
+            "coordinates": [111.48, 40.49]
+        }
+    }, {
+        "type": "Feature",
+        "propertise": {
+            "name": "\u6cb3\u5317"
+        },
+        "geometry": {
+            "type": "Point",
+            "coordinates": [114.28, 38.02]
+        }
+    }, {
+        "type": "Feature",
+        "propertise": {
+            "name": "\u5c71\u897f"
+        },
+        "geometry": {
+            "type": "Point",
+            "coordinates": [112.34, 37.52]
+        }
+    }, {
+        "type": "Feature",
+        "propertise": {
+            "name": "\u5c71\u4e1c"
+        },
+        "geometry": {
+            "type": "Point",
+            "coordinates": [117.0, 36.38]
+        }
+    }, {
+        "type": "Feature",
+        "propertise": {
+            "name": "\u6cb3\u5357"
+        },
+        "geometry": {
+            "type": "Point",
+            "coordinates": [113.42, 34.48]
+        }
+    }, {
+        "type": "Feature",
+        "propertise": {
+            "name": "\u9655\u897f"
+        },
+        "geometry": {
+            "type": "Point",
+            "coordinates": [108.54, 34.16]
+        }
+    }, {
+        "type": "Feature",
+        "propertise": {
+            "name": "\u7518\u8083"
+        },
+        "geometry": {
+            "type": "Point",
+            "coordinates": [103.49, 36.03]
+        }
+    }, {
+        "type": "Feature",
+        "propertise": {
+            "name": "\u5b81\u590f"
+        },
+        "geometry": {
+            "type": "Point",
+            "coordinates": [106.16, 38.2]
+        }
+    }, {
+        "type": "Feature",
+        "propertise": {
+            "name": "\u9752\u6d77"
+        },
+        "geometry": {
+            "type": "Point",
+            "coordinates": [101.45, 36.38]
+        }
+    }, {
+        "type": "Feature",
+        "propertise": {
+            "name": "\u65b0\u7586"
+        },
+        "geometry": {
+            "type": "Point",
+            "coordinates": [87.36, 43.48]
+        }
+    }, {
+        "type": "Feature",
+        "propertise": {
+            "name": "\u5b89\u5fbd"
+        },
+        "geometry": {
+            "type": "Point",
+            "coordinates": [117.18, 31.51]
+        }
+    }, {
+        "type": "Feature",
+        "propertise": {
+            "name": "\u6c5f\u82cf"
+        },
+        "geometry": {
+            "type": "Point",
+            "coordinates": [118.5, 32.02]
+        }
+    }, {
+        "type": "Feature",
+        "propertise": {
+            "name": "\u6d59\u6c5f"
+        },
+        "geometry": {
+            "type": "Point",
+            "coordinates": [120.09, 30.14]
+        }
+    }, {
+        "type": "Feature",
+        "propertise": {
+            "name": "\u6e56\u5357"
+        },
+        "geometry": {
+            "type": "Point",
+            "coordinates": [113.0, 28.11]
+        }
+    }, {
+        "type": "Feature",
+        "propertise": {
+            "name": "\u6c5f\u897f"
+        },
+        "geometry": {
+            "type": "Point",
+            "coordinates": [115.52, 28.41]
+        }
+    }, {
+        "type": "Feature",
+        "propertise": {
+            "name": "湖北"
+        },
+        "geometry": {
+            "type": "Point",
+            "coordinates": [114.21, 30.37]
+        }
+    }, {
+        "type": "Feature",
+        "propertise": {
+            "name": "\u56db\u5ddd"
+        },
+        "geometry": {
+            "type": "Point",
+            "coordinates": [104.05, 30.39]
+        }
+    }, {
+        "type": "Feature",
+        "propertise": {
+            "name": "\u8d35\u5dde"
+        },
+        "geometry": {
+            "type": "Point",
+            "coordinates": [106.42, 26.35]
+        }
+    }, {
+        "type": "Feature",
+        "propertise": {
+            "name": "\u798f\u5efa"
+        },
+        "geometry": {
+            "type": "Point",
+            "coordinates": [119.18, 26.05]
+        }
+    }, {
+        "type": "Feature",
+        "propertise": {
+            "name": "\u5e7f\u4e1c"
+        },
+        "geometry": {
+            "type": "Point",
+            "coordinates": [113.15, 23.08]
+        }
+    }, {
+        "type": "Feature",
+        "propertise": {
+            "name": "\u6d77\u5357"
+        },
+        "geometry": {
+            "type": "Point",
+            "coordinates": [110.2, 20.02]
+        }
+    }, {
+        "type": "Feature",
+        "propertise": {
+            "name": "\u5e7f\u897f"
+        },
+        "geometry": {
+            "type": "Point",
+            "coordinates": [108.2, 22.48]
+        }
+    }, {
+        "type": "Feature",
+        "propertise": {
+            "name": "\u897f\u85cf"
+        },
+        "geometry": {
+            "type": "Point",
+            "coordinates": [91.1, 29.4]
+        }
+    }, {
+        "type": "Feature",
+        "propertise": {
+            "name": "云南"
+        },
+        "geometry": {
+            "type": "Point",
+            "coordinates": [102, 24]
+        }
+    }]
+}
