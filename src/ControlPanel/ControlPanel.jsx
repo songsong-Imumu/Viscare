@@ -12,23 +12,24 @@ export default class ControlPanel extends React.Component {
       <div id={`ControlPanel`} className={"framework"}>
         <Heading title={`Control Panel`}></Heading>
         <Row style={{ marginTop: 35, marginLeft: 5 }}>
-          <Col span={6}>
+          <Col span={5}>
             <Button type="dashed">Year:</Button>
           </Col>
           <Col span={12}>
             <Slider
               min={1998}
               max={2017}
-              // onChange={onChange}
-              // value={typeof inputValue === "number" ? inputValue : 0}
+              defaultValue={2012}
+              onChange={this.changeYear}
+            // value={typeof inputValue === "number" ? inputValue : 0}
             />
           </Col>
           <Col span={6}>
             <InputNumber
               min={1998}
               max={2017}
-              defaultValue={1998}
-              // onChange={onChange}
+              defaultValue={2012}
+            // onChange={onChange}
             ></InputNumber>
           </Col>
         </Row>
@@ -40,7 +41,7 @@ export default class ControlPanel extends React.Component {
             <Select
               defaultValue="Beijing"
               style={{ width: 150 }}
-              // onChange={handleChange}
+            // onChange={handleChange}
             >
               <Option value="Beijing">Beijing</Option>
               <Option value="Tianjin">Tianjin</Option>
@@ -77,7 +78,7 @@ export default class ControlPanel extends React.Component {
             <Select
               defaultValue="Provinces"
               style={{ width: 120 }}
-              // onChange={handleChange}
+            // onChange={handleChange}
             >
               <Option value="Provinces">Provinces</Option>
               <Option value="Areas">Areas</Option>
@@ -92,8 +93,9 @@ export default class ControlPanel extends React.Component {
             <Slider
               min={1}
               max={10}
-              // onChange={onChange}
-              // value={typeof inputValue === "number" ? inputValue : 0}
+              defaultValue={4}
+            // onChange={onChange}
+            // value={typeof inputValue === "number" ? inputValue : 0}
             />
           </Col>
           <Col span={6}>
@@ -101,7 +103,7 @@ export default class ControlPanel extends React.Component {
               min={0.1}
               max={1.0}
               defaultValue={0.1}
-              // onChange={onChange}
+            // onChange={onChange}
             ></InputNumber>
           </Col>
         </Row>
@@ -127,5 +129,8 @@ export default class ControlPanel extends React.Component {
         </Row>
       </div>
     );
+  }
+  changeYear = (Year) => {
+    this.props.callback({ Year: Year });
   }
 }

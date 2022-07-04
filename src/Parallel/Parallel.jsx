@@ -328,7 +328,7 @@ export default class Parallel extends React.Component {
       [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3],
     ],
   };
-  componentDidMount() {}
+  componentDidMount() { }
   componentWillUnmount() {
     this.drawParallel();
   }
@@ -413,7 +413,7 @@ export default class Parallel extends React.Component {
 
     // remove and add svg
     d3.select("#parallel").remove();
-    var svg = d3
+    let svg = d3
       .select("#Parallel")
       .append("svg")
       .attr("width", width)
@@ -537,9 +537,10 @@ export default class Parallel extends React.Component {
       .attr("fill", "none")
       .attr("stroke", (_, i) => {
         // return colors[i % 3]
-        return colors[0];
+        // return colors[0];
+        return 'darkgray'
       })
-      .attr("stroke-width", 1.5)
+      .attr("stroke-width", 3)
       .attr("transform", "translate(55,-13)")
       .attr("opacity", 0.5);
     // .on("click", function (d, i) {
@@ -622,6 +623,7 @@ export default class Parallel extends React.Component {
         return colors[Cluster[i]];
       })
       .attr("stroke-width", 1.5)
+      .attr('opacity', 0.9)
       .attr("transform", "translate(0,-10)");
   };
 
