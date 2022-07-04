@@ -7,6 +7,10 @@ import "antd/dist/antd.css";
 const { Option } = Select;
 
 export default class ControlPanel extends React.Component {
+  state = {
+    Year: 2012,
+    Province: "Beijing",
+  };
   render() {
     return (
       <div id={`ControlPanel`} className={"framework"}>
@@ -21,7 +25,7 @@ export default class ControlPanel extends React.Component {
               max={2017}
               defaultValue={2012}
               onChange={this.changeYear}
-            // value={typeof inputValue === "number" ? inputValue : 0}
+              // value={typeof inputValue === "number" ? inputValue : 0}
             />
           </Col>
           <Col span={6}>
@@ -29,7 +33,7 @@ export default class ControlPanel extends React.Component {
               min={1998}
               max={2017}
               defaultValue={2012}
-            // onChange={onChange}
+              // onChange={onChange}
             ></InputNumber>
           </Col>
         </Row>
@@ -41,14 +45,14 @@ export default class ControlPanel extends React.Component {
             <Select
               defaultValue="Beijing"
               style={{ width: 150 }}
-            // onChange={handleChange}
+              onChange={this.changeProvince}
             >
               <Option value="Beijing">Beijing</Option>
               <Option value="Tianjin">Tianjin</Option>
-              <Option value="Heibei">Heibei</Option>
+              <Option value="Hebei">Hebei</Option>
               <Option value="Shanxi">Shanxi</Option>
-              <Option value="InnerMoglia">InnerMoglia</Option>
-              <Option value="Liaonning">Liaonning</Option>
+              <Option value="InnerMongolia">InnerMongolia</Option>
+              <Option value="Liaoning">Liaoning</Option>
               <Option value="Jilin">Jilin</Option>
               <Option value="Heilongjiang">Heilongjiang</Option>
               <Option value="Shanghai">Shanghai</Option>
@@ -66,7 +70,7 @@ export default class ControlPanel extends React.Component {
               <Option value="Hainan">Hainan</Option>
               <Option value="Sichuan">Sichuan</Option>
               <Option value="Guizhou">Guizhou</Option>
-              <Option value="Chongqin">Chongqin</Option>
+              <Option value="Chongqing">Chongqing</Option>
               <Option value="Shaanxi">Shaanxi</Option>
               <Option value="Gansu">Gansu</Option>
               <Option value="Qinghai">Qinghai</Option>
@@ -78,7 +82,7 @@ export default class ControlPanel extends React.Component {
             <Select
               defaultValue="Provinces"
               style={{ width: 120 }}
-            // onChange={handleChange}
+              // onChange={handleChange}
             >
               <Option value="Provinces">Provinces</Option>
               <Option value="Areas">Areas</Option>
@@ -94,8 +98,8 @@ export default class ControlPanel extends React.Component {
               min={1}
               max={10}
               defaultValue={4}
-            // onChange={onChange}
-            // value={typeof inputValue === "number" ? inputValue : 0}
+              // onChange={onChange}
+              // value={typeof inputValue === "number" ? inputValue : 0}
             />
           </Col>
           <Col span={6}>
@@ -103,7 +107,7 @@ export default class ControlPanel extends React.Component {
               min={0.1}
               max={1.0}
               defaultValue={0.1}
-            // onChange={onChange}
+              // onChange={onChange}
             ></InputNumber>
           </Col>
         </Row>
@@ -131,6 +135,11 @@ export default class ControlPanel extends React.Component {
     );
   }
   changeYear = (Year) => {
-    this.props.callback({ Year: Year });
-  }
+    this.setState({ Year: Year });
+    this.props.callback({ Year: Year, Province: this.state.Province });
+  };
+  changeProvince = (Province) => {
+    this.setState({ Province: Province });
+    this.props.callback({ Year: this.state.Year, Province: Province });
+  };
 }

@@ -9,23 +9,24 @@ import { Header } from "antd/lib/layout/layout.js";
 
 export default class Root extends React.Component {
   state = {
-    Year: 2012
-  }
+    Year: 2012,
+    Province: "Beijing",
+  };
   render() {
-    const { Year } = this.state
+    const { Year, Province } = this.state;
     return (
       <div id="Root">
         <ControlPanel callback={this.getAttribute}></ControlPanel>
         <Network></Network>
         <Sunburst Year={Year}></Sunburst>
         <NMap Year={Year}></NMap>
-        <TreeMap></TreeMap>
+        <TreeMap Year={Year} Province={Province}></TreeMap>
         <Parallel></Parallel>
       </div>
     );
   }
   getAttribute = (d) => {
-    const { Year } = d;
-    this.setState({ Year: Year });
-  }
+    const { Year, Province } = d;
+    this.setState({ Year: Year, Province: Province });
+  };
 }

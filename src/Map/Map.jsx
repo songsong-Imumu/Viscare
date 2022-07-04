@@ -55,7 +55,7 @@ export default class NMap extends React.Component {
   }
   render() {
     const width = 830;
-    const height = 555;
+    const height = 655;
     return (
       <div id={`Map`} className={"framework"}>
         <Heading title={`Map View`}></Heading>
@@ -76,9 +76,9 @@ export default class NMap extends React.Component {
       // style: 'mapbox://styles/songsongsongsong/cka4lyt08098m1imntn7ckjdl',
       // style: 'mapbox://styles/songsongsongsong/ck79xfszr19ku1intafbpd4fv',
       center: [104.2, 37.9],
-      zoom: 3,
-      minZoom: 3.0,
-      maxZoom: 3.0,
+      zoom: 3.1,
+      minZoom: 3.1,
+      maxZoom: 3.1,
       // dragPan: true,
     });
     let dataset = [];
