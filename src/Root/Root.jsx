@@ -11,22 +11,23 @@ export default class Root extends React.Component {
   state = {
     Year: 2012,
     Province: "Beijing",
+    Pattern: "Provinces",
   };
   render() {
-    const { Year, Province } = this.state;
+    const { Year, Province, Pattern } = this.state;
     return (
       <div id="Root">
         <ControlPanel callback={this.getAttribute}></ControlPanel>
-        <Network></Network>
+        <Network Year={Year}></Network>
         <Sunburst Year={Year}></Sunburst>
-        <NMap Year={Year}></NMap>
+        <NMap Year={Year} Pattern={Pattern}></NMap>
         <TreeMap Year={Year} Province={Province}></TreeMap>
         <Parallel></Parallel>
       </div>
     );
   }
   getAttribute = (d) => {
-    const { Year, Province } = d;
-    this.setState({ Year: Year, Province: Province });
+    const { Year, Province, Pattern } = d;
+    this.setState({ Year: Year, Province: Province, Pattern: Pattern });
   };
 }

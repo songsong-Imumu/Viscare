@@ -29,7 +29,7 @@ export default class TreeMap extends React.Component {
         dataset = d;
       }
     }
-    console.log(dataset);
+    // console.log(dataset);
     for (let i = 0; i < 4; i++) {
       let d = dataset.children[i].children;
       let temp = [];
@@ -237,7 +237,7 @@ export default class TreeMap extends React.Component {
         this.route(temp, r);
       }
     } else {
-      console.log(parent, temp);
+      // console.log(parent, temp);
       if (temp.house <= 5) {
         const index = parent.children.indexOf(temp);
         return parent.children.splice(index, 1);

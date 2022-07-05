@@ -82,7 +82,7 @@ export default class ControlPanel extends React.Component {
             <Select
               defaultValue="Provinces"
               style={{ width: 120 }}
-              // onChange={handleChange}
+              onChange={this.changePattern}
             >
               <Option value="Provinces">Provinces</Option>
               <Option value="Areas">Areas</Option>
@@ -136,10 +136,26 @@ export default class ControlPanel extends React.Component {
   }
   changeYear = (Year) => {
     this.setState({ Year: Year });
-    this.props.callback({ Year: Year, Province: this.state.Province });
+    this.props.callback({
+      Year: Year,
+      Province: this.state.Province,
+      Pattern: this.state.Pattern,
+    });
   };
   changeProvince = (Province) => {
     this.setState({ Province: Province });
-    this.props.callback({ Year: this.state.Year, Province: Province });
+    this.props.callback({
+      Year: this.state.Year,
+      Province: Province,
+      Pattern: this.state.Pattern,
+    });
+  };
+  changePattern = (Pattern) => {
+    this.setState({ Pattern: Pattern });
+    this.props.callback({
+      Year: this.state.Year,
+      Province: this.state.Province,
+      Pattern,
+    });
   };
 }
