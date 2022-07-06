@@ -2,7 +2,7 @@ import React from "react";
 import "./ControlPanel.css";
 import Heading from "../Heading/Heading.jsx";
 
-import { Button, Row, Col, Slider, InputNumber, Select, Switch } from "antd";
+import { Button, Row, Col, Slider, InputNumber, Select, Switch, Input } from "antd";
 import "antd/dist/antd.css";
 const { Option } = Select;
 
@@ -10,8 +10,11 @@ export default class ControlPanel extends React.Component {
   state = {
     Year: 2012,
     Province: "Beijing",
+    Pattern: 'Provinces',
+    Scale: 4
   };
   render() {
+    const { Year, Province, Pattern, Scale } = this.state;
     return (
       <div id={`ControlPanel`} className={"framework"}>
         <Heading title={`Control Panel`}></Heading>
@@ -25,15 +28,16 @@ export default class ControlPanel extends React.Component {
               max={2017}
               defaultValue={2012}
               onChange={this.changeYear}
-              // value={typeof inputValue === "number" ? inputValue : 0}
+            // value={typeof inputValue === "number" ? inputValue : 0}
             />
           </Col>
           <Col span={6}>
             <InputNumber
               min={1998}
               max={2017}
-              defaultValue={2012}
-              // onChange={onChange}
+              value={Year}
+            // defaultValue={2012}
+            // onChange={changeYearNumber}
             ></InputNumber>
           </Col>
         </Row>
@@ -90,25 +94,25 @@ export default class ControlPanel extends React.Component {
           </Col>
         </Row>
         <Row style={{ marginTop: 10, marginLeft: 5 }}>
-          <Col span={12}>
+          <Col span={10}>
             <Button type="dashed">Distribution Scale:</Button>
           </Col>
-          <Col span={6}>
+          <Col span={8}>
             <Slider
               min={1}
               max={10}
               defaultValue={4}
-              // onChange={onChange}
-              // value={typeof inputValue === "number" ? inputValue : 0}
+              onChange={this.changeScale}
+            // value={typeof inputValue === "number" ? inputValue : 0}
             />
           </Col>
           <Col span={6}>
-            <InputNumber
-              min={0.1}
-              max={1.0}
-              defaultValue={0.1}
-              // onChange={onChange}
-            ></InputNumber>
+            <Input style={{ width: '85px' }} value={Scale / 10}></Input>
+            {/* <InputNumber
+              min={1}
+              max={10}
+              defaultValue={Scale / 10}
+            ></InputNumber> */}
           </Col>
         </Row>
         <Row style={{ marginTop: 10, marginLeft: 5 }}>
@@ -158,4 +162,7 @@ export default class ControlPanel extends React.Component {
       Pattern,
     });
   };
+  changeScale = (Scale) => {
+    this.setState({ Scale: Scale });
+  }
 }

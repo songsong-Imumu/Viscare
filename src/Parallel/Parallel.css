@@ -5,3 +5,11 @@
   width: 1390px;
   height: 380px;
 }
+
+#p_legend {
+  position: absolute;
+}
+
+#parallel {
+  position: absolute;
+}
