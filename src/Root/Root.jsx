@@ -17,12 +17,12 @@ export default class Root extends React.Component {
     const { Year, Province, Pattern } = this.state;
     return (
       <div id="Root">
-        <ControlPanel callback={this.getAttribute}></ControlPanel>
+        <ControlPanel Year={Year} callback={this.getAttribute}></ControlPanel>
         <Network Year={Year}></Network>
         <Sunburst Year={Year}></Sunburst>
         <NMap Year={Year} Pattern={Pattern}></NMap>
         <TreeMap Year={Year} Province={Province}></TreeMap>
-        <Parallel></Parallel>
+        <Parallel Year={Year} callback={this.getParallelYear}></Parallel>
       </div>
     );
   }
@@ -30,4 +30,8 @@ export default class Root extends React.Component {
     const { Year, Province, Pattern } = d;
     this.setState({ Year: Year, Province: Province, Pattern: Pattern });
   };
+  getParallelYear = (d) => {
+    const { Year } = d;
+    this.setState({ Year: Year })
+  }
 }

@@ -7,6 +7,10 @@ import "antd/dist/antd.css";
 const { Option } = Select;
 
 export default class ControlPanel extends React.Component {
+  componentDidMount() {
+    const { Year } = this.props
+    this.setState({ Year: Year })
+  }
   state = {
     Year: 2012,
     Province: "Beijing",
@@ -14,7 +18,8 @@ export default class ControlPanel extends React.Component {
     Scale: 4
   };
   render() {
-    const { Year, Province, Pattern, Scale } = this.state;
+    const { Province, Pattern, Scale } = this.state;
+    const { Year } = this.props;
     return (
       <div id={`ControlPanel`} className={"framework"}>
         <Heading title={`Control Panel`}></Heading>
@@ -27,6 +32,7 @@ export default class ControlPanel extends React.Component {
               min={1998}
               max={2017}
               defaultValue={2012}
+              value={Year}
               onChange={this.changeYear}
             // value={typeof inputValue === "number" ? inputValue : 0}
             />

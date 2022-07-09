@@ -149,10 +149,11 @@ export default class NMap extends React.Component {
       "#17becf",
     ],
   };
-  componentDidMount() {}
+  componentDidMount() { }
   componentWillUnmount() {
     let map = this.initMap();
     this.setState({ map: map });
+    this.drawLegend();
   }
   componentDidUpdate() {
     this.drawMap();
@@ -163,7 +164,9 @@ export default class NMap extends React.Component {
     return (
       <div id={`Map`} className={"framework"}>
         <Heading title={`Map View`}></Heading>
-        <div id="map" style={{ height: height, width: width }}></div>
+        <div id="map" style={{ height: height, width: width }}>
+          <svg id="mapsvg"></svg>
+        </div>
       </div>
     );
   }
@@ -336,4 +339,16 @@ export default class NMap extends React.Component {
       }
     }
   };
+  drawLegend = () => {
+    const red = this.state.colors.red;
+    const blue = this.state.colors.blue;
+    let svg = d3.select('#mapsvg')
+    d3.selectAll('.red')
+      .attr('data', red)
+      .append('rect')
+      .attr('x', 20)
+      .attr('y', (_, i) => i * 20 + 100)
+      .attr('width', 20)
+      .attr('height', 20)
+  }
 }

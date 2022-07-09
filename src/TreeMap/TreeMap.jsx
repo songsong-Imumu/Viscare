@@ -5,7 +5,7 @@ import data from "../data/treemap.json";
 import * as d3 from "d3";
 
 export default class TreeMap extends React.Component {
-  componentDidMount() {}
+  componentDidMount() { }
   componentWillUnmount() {
     this.drawTreeMap();
   }
@@ -34,7 +34,7 @@ export default class TreeMap extends React.Component {
       let d = dataset.children[i].children;
       let temp = [];
       for (let j = 0; j < d.length; j++) {
-        if (d[j].house >= 10) {
+        if (d[j].value >= 10) {
           temp.push(d[j]);
         }
       }
@@ -50,7 +50,7 @@ export default class TreeMap extends React.Component {
 
     // console.log(dataset);
     let chart = this.D3_Treemap(dataset, {
-      value: (d) => d.house, // size of each node (file); null for internal nodes (folders)
+      value: (d) => d.value, // size of each node (file); null for internal nodes (folders)
       group: (d, n) => n.ancestors().slice(-2)[0].data.name, // e.g., "animate" in flare/animate/Easing; color
       label: (d, n) =>
         [...d.name.split(/(?=[A-Z][a-z])/g), n.value.toLocaleString("en")].join(
@@ -98,7 +98,7 @@ export default class TreeMap extends React.Component {
       paddingBottom = paddingOuter, // to separate a node’s bottom edge from its children
       paddingLeft = paddingOuter, // to separate a node’s left edge from its children
       round = true, // whether to round to exact pixels
-      colors = d3.schemeTableau10, // array of colors
+      colors = d3.schemeSet2, // array of colors
       zDomain, // array of values for the color scale
       fill = "#ccc", // fill for node rects (if no group color encoding)
       fillOpacity = group == null ? null : 0.6, // fill opacity for node rects
@@ -116,8 +116,8 @@ export default class TreeMap extends React.Component {
       path != null
         ? d3.stratify().path(path)(data)
         : id != null || parentId != null
-        ? d3.stratify().id(id).parentId(parentId)(data)
-        : d3.hierarchy(data, children);
+          ? d3.stratify().id(id).parentId(parentId)(data)
+          : d3.hierarchy(data, children);
 
     // Compute the values of internal nodes by aggregating from the leaves.
     value == null ? root.count() : root.sum((d) => Math.max(0, value(d)));
@@ -135,8 +135,8 @@ export default class TreeMap extends React.Component {
       title === undefined
         ? L
         : title == null
-        ? null
-        : leaves.map((d) => title(d.data, d));
+          ? null
+          : leaves.map((d) => title(d.data, d));
 
     // Sort the leaves (typically by descending value for a pleasing layout).
     if (sort != null) root.sort(sort);
@@ -167,9 +167,26 @@ export default class TreeMap extends React.Component {
       .attr("style", "max-width: 100%; height: auto; height: intrinsic;")
       .attr("font-family", "sans-serif")
       .attr("font-size", 16)
-      .attr("transform", "translate(0,10)");
+    // .attr("transform", "translate(0,10)");
 
-    const node = svg
+    svg.selectAll('.c_Legend_text').data(['Raw Coal', 'Crude Oil', 'Natural Gas', 'Process']).enter().append('text').attr('class', 'c_Legend_text')
+      .attr('x', (_, i) => i * 90 + 160)
+      .attr('y', -10)
+      .text(d => d)
+      .attr('font-size', 12)
+    svg.selectAll('.c_Legend').data(d3.range(4)).enter().append('rect').attr('class', 'c_Legend')
+      .attr('x', (_, i) => i * 90 + 145)
+      .attr('y', -20)
+      .attr('width', 12)
+      .attr('height', 12)
+      .attr('rx', 2)
+      .attr('ry', 2)
+      .attr('index', (_, i) => i)
+      .attr('fill', (_, i) => colors[i])
+      .attr('opacity', 0.6)
+
+    const g = svg.append('g').attr('transform', 'translate(0,10)')
+    const node = g
       .selectAll("a")
       .data(leaves)
       .join("a")
@@ -179,7 +196,11 @@ export default class TreeMap extends React.Component {
 
     node
       .append("rect")
-      .attr("fill", color ? (d, i) => color(G[i]) : fill)
+      .attr("fill", (d, i) => {
+        // console.log(d.parent.data.name)
+        let index = ['Raw Coal', 'Crude Oil', 'Natural Gas', 'Process'].indexOf(d.parent.data.name)
+        return colors[index]
+      })
       .attr("fill-opacity", fillOpacity)
       .attr("stroke", stroke)
       .attr("stroke-width", strokeWidth)
@@ -238,7 +259,7 @@ export default class TreeMap extends React.Component {
       }
     } else {
       // console.log(parent, temp);
-      if (temp.house <= 5) {
+      if (temp.value <= 5) {
         const index = parent.children.indexOf(temp);
         return parent.children.splice(index, 1);
       }

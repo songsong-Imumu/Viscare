@@ -338,7 +338,10 @@ export default class Parallel extends React.Component {
   componentDidMount() { }
   componentWillUnmount() {
     this.drawParallel();
-    this.draw_P_Legend();
+    // this.draw_P_Legend();
+  }
+  componentDidUpdate() {
+    this.drawParallel();
   }
   render() {
     const width = 1390;
@@ -362,6 +365,7 @@ export default class Parallel extends React.Component {
       Cluster,
       leibies,
     } = this.state;
+    const { Year } = this.props
 
     let nodes = [];
     let count = 0;
@@ -429,6 +433,25 @@ export default class Parallel extends React.Component {
       .attr("id", "parallel")
       // .call(d3.zoom().scaleExtent([0.5, 6]).on("zoom", zoomed))
       .append("g");
+
+    svg.selectAll('.p_Legend_text').data(d3.range(5)).enter().append('text').attr('class', 'p_Legend_text')
+      .attr('x', (_, i) => i * 150 + 205)
+      .attr('y', 25)
+      .text((_, i) => {
+        let num = i + 1
+        let abs = 'Cluster_' + num
+        return abs
+      })
+      .attr('font-size', 12)
+    svg.selectAll('.p_Legend').data(d3.range(5)).enter().append('rect').attr('class', 'p_Legend')
+      .attr('x', (_, i) => i * 150 + 180)
+      .attr('y', 13)
+      .attr('width', 15)
+      .attr('height', 15)
+      // .attr('rx', 2)
+      // .attr('ry', 2)
+      .attr('index', (_, i) => i)
+      .attr('fill', (_, i) => colors[i])
 
     let g = svg.append("g");
     let rects_number = [];
@@ -551,7 +574,11 @@ export default class Parallel extends React.Component {
       .attr("stroke-width", 3)
       .attr("transform", "translate(85,-13)")
       .attr("opacity", 0.5)
-      .on("click", function (d, i) {
+      .on('mouseover', function (_, d) {
+        d3.select(this).append('title').text(d.name)
+      })
+      .on("click", function (e, d) {
+        // console.log(d, i)
         d3.selectAll(".paths")
           .transition()
           .duration(500)
@@ -575,6 +602,17 @@ export default class Parallel extends React.Component {
       for (let j = 0; j < matrix_3D[i].length; j++)
         matrix_2D.push(matrix_3D[i][j]);
     }
+    for (let i = 0; i < 20; i++) {
+      svg.append('text')
+        .attr('x', i * 66 + 75)
+        .attr('y', height - 10)
+        .text(i + 1998)
+        .attr('stroke', () => {
+          // console.log(i + 1998, Year)
+          return i + 1998 === Year ? 'black' : 'darkgray'
+        })
+    }
+    let yearCount = 0;
     svg
       .selectAll(".parallel")
       .data(rects_number)
@@ -591,6 +629,18 @@ export default class Parallel extends React.Component {
           }
         } else {
           return 55;
+        }
+      })
+      .attr('yearCount', (d, i) => {
+        if (i != 0) {
+          if (d < rects_number[i - 1]) {
+            yearCount++;
+            return yearCount;
+          } else {
+            return yearCount;
+          }
+        } else {
+          return 0;
         }
       })
       .attr("y", (d, i) => {
@@ -635,10 +685,11 @@ export default class Parallel extends React.Component {
       .attr("stroke-width", 1.5)
       .attr('opacity', 0.9)
       .attr("transform", "translate(30,-10)")
-      .on('click', function (e, d) {
+      .on('click', (e, d) => {
         // console.log(e, d)
         // console.log(matrix_2D)
         // console.log(e.currentTarget.getAttribute("index"))
+        // console.log(e.currentTarget.getAttribute('yearCount'))
         let index = e.currentTarget.getAttribute("index")
         let array = matrix_2D[index]
 
@@ -653,6 +704,8 @@ export default class Parallel extends React.Component {
             if (array.indexOf(i) !== -1) return 2
             return 1.5
           })
+        let Year = e.currentTarget.getAttribute('yearCount')
+        this.props.callback({ Year: parseInt(Year) + 1998})
         // province_array = []
         // for (i = 0; i < array.length; i++) {
         // province_array.push(provinces[array[i]])
@@ -702,9 +755,6 @@ export default class Parallel extends React.Component {
       // .attr('ry', 2)
       .attr('index', (_, i) => i)
       .attr('fill', (_, i) => colors[i])
-      .on('mouseover', e => {
-        e.cursor = 'pointer';
-      })
       .on('click', (e, i) => {
         let index = e.currentTarget.getAttribute('index')
         // let array = matrix_2D[index]
@@ -900,17 +950,17 @@ export default class Parallel extends React.Component {
         svg = d3.select('#parallel')
         let ab_text = ['Stable', 'Aggregate', 'Detach']
         svg.selectAll('.p_text').data(ab_text).enter().append('text').attr('class', 'p_text').transition().duration(500)
-          .attr('x', 0)
-          .attr('y', (_, i) => 60 * i + 40)
+          .attr('x', 10)
+          .attr('y', (_, i) => 80 * i + 110)
           .text(d => d)
           .attr('font-size', 10)
         // abcolors = ['aqua', 'lime', 'red']
-        let abcolors = ["#377eb8", "#e41a1c", "#4daf4a"]
+        let abcolors = ["#377eb8", "#4daf4a", "#e41a1c"]
         svg.selectAll('.p_line').data(abcolors).enter().append('line').attr('class', 'p_line').transition().duration(500)
-          .attr('x1', 0)
-          .attr('x2', 35)
-          .attr('y1', (_, i) => 60 * i + 20)
-          .attr('y2', (_, i) => 60 * i + 20)
+          .attr('x1', 10)
+          .attr('x2', 45)
+          .attr('y1', (_, i) => 80 * i + 120)
+          .attr('y2', (_, i) => 80 * i + 120)
           .attr('stroke', (_, i) => abcolors[i])
           .attr('stroke-width', 3)
       })

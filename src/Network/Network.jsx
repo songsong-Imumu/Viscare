@@ -133,7 +133,7 @@ export default class Network extends React.Component {
       "#17becf",
     ],
   };
-  componentDidMount() {}
+  componentDidMount() { }
   componentWillUnmount() {
     this.drawNetwork();
   }
@@ -185,6 +185,25 @@ export default class Network extends React.Component {
       .attr("id", "network")
       .attr("style", "max-width: 100%; height: auto; height: intrinsic;")
       .attr("font-family", "sans-serif");
+
+    svg.selectAll('.c_Legend_text').data(d3.range(d3.max(cluster) + 1)).enter().append('text').attr('class', 'c_Legend_text')
+      .attr('x', (_, i) => i * 80 + 160)
+      .attr('y', 25)
+      .text((_, i) => {
+        let num = i + 1
+        let abs = 'Cluster_' + num
+        return abs
+      })
+      .attr('font-size', 12)
+    svg.selectAll('.c_Legend').data(d3.range(d3.max(cluster) + 1)).enter().append('rect').attr('class', 'c_Legend')
+      .attr('x', (_, i) => i * 80 + 140)
+      .attr('y', 13)
+      .attr('width', 15)
+      .attr('height', 15)
+      // .attr('rx', 2)
+      // .attr('ry', 2)
+      .attr('index', (_, i) => i)
+      .attr('fill', (_, i) => colors[i])
 
     const simulation = d3
       .forceSimulation(nodes)

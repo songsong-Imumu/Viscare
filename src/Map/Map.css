@@ -5,3 +5,14 @@
   width: 830px;
   height: 655px;
 }
+
+#mapsvg {
+  position: absolute;
+  /* left: 410px; */
+  width: 830px;
+  height: 655px;
+}
+
+canvas {
+  z-index: -1;
+}
