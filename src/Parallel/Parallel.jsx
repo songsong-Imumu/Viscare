@@ -333,7 +333,10 @@ export default class Parallel extends React.Component {
       [3, 2, 5, 4, 6, 7, 0, 1, 15, 14],
       [25, 26, 27, 28, 29, 22, 4, 6, 7],
       [0, 1, 16, 15, 3, 25]
-    ]
+    ],
+    Year: 2012,
+    Province_Array: new Array(30).fill(0).map((_, i) => i),
+    Province: 'Beijing'
   };
   componentDidMount() { }
   componentWillUnmount() {
@@ -365,7 +368,7 @@ export default class Parallel extends React.Component {
       Cluster,
       leibies,
     } = this.state;
-    const { Year } = this.props
+    const { Year, Province, Province_Array } = this.props
 
     let nodes = [];
     let count = 0;
@@ -566,34 +569,36 @@ export default class Parallel extends React.Component {
         return line(d["value"]);
       })
       .attr("fill", "none")
-      .attr("stroke", (_, i) => {
-        // return colors[i % 3]
-        // return colors[0];
-        return 'darkgray'
-      })
+      .attr("stroke", 'darkgray')
       .attr("stroke-width", 3)
       .attr("transform", "translate(85,-13)")
-      .attr("opacity", 0.5)
+      // .attr("opacity", d => {
+      //   return d.name === Province ? 1 : 0.2
+      // })
+      .attr('opacity', 0.5)
       .on('mouseover', function (_, d) {
         d3.select(this).append('title').text(d.name)
       })
-      .on("click", function (e, d) {
+      .on("click", (e, d) => {
         // console.log(d, i)
         d3.selectAll(".paths")
           .transition()
           .duration(500)
-          .attr("opacity", 0.2);
-        d3.select(this)
-          .transition()
-          .duration(1000)
-          .attr("stroke-width", 5)
-          .attr("opacity", 1)
-          .attr("stroke", "darkgray");
+          .attr("opacity", _d => d === _d ? 1 : 0.2)
+        // this.setState({ Province: d['name'] })
+        // this.props.callback({ Year: this.state.Year, Province: d['name'], Province_Array: this.state.Province_Array })
+        // d3.select(this)
+        //   .transition()
+        //   .duration(1000)
+        //   .attr("stroke-width", 5)
+        //   .attr("opacity", 1)
+        //   .attr("stroke", "darkgray");
         // d3.select(this).append('title').text(function () {
         //     return d['name']
         // })
         // highlightMap2([provinces[i]]);
       });
+
 
     count = -1;
     let y_count = 0;
@@ -686,33 +691,48 @@ export default class Parallel extends React.Component {
       .attr('opacity', 0.9)
       .attr("transform", "translate(30,-10)")
       .on('click', (e, d) => {
-        // console.log(e, d)
-        // console.log(matrix_2D)
-        // console.log(e.currentTarget.getAttribute("index"))
-        // console.log(e.currentTarget.getAttribute('yearCount'))
         let index = e.currentTarget.getAttribute("index")
         let array = matrix_2D[index]
+        let Year = e.currentTarget.getAttribute('yearCount')
 
-        // d3.selectAll('.parallel').attr('fill', (_, i) => colors[Cluster[i]])
-        // d3.select(this).attr('fill', 'yellow')
-        d3.selectAll('.paths').transition().duration(500)
+        d3.selectAll('.paths')
           .attr('opacity', (_, i) => {
-            if (array.indexOf(i) !== -1) return 0.8
+            if (array.indexOf(i) !== -1) { return 0.8 }
             return 0.2
           })
           .attr('stroke-width', (_, i) => {
             if (array.indexOf(i) !== -1) return 2
             return 1.5
           })
-        let Year = e.currentTarget.getAttribute('yearCount')
-        this.props.callback({ Year: parseInt(Year) + 1998})
-        // province_array = []
-        // for (i = 0; i < array.length; i++) {
-        // province_array.push(provinces[array[i]])
-        // }
-        // highlightMap2(province_array)
+        this.props.callback({ Year: parseInt(Year) + 1998, Province_Array: array })
       });
+
+    let array = Province_Array
+
+    d3.selectAll('.paths')
+      .attr('opacity', (_, i) => {
+        if (array.indexOf(i) !== -1) { return 0.8 }
+        return 0.2
+      })
+      .attr('stroke-width', (_, i) => {
+        if (array.indexOf(i) !== -1) return 2
+        return 1.5
+      })
   };
+
+  highlightlines = (e, d, matrix_2D) => {
+    let index = e.currentTarget.getAttribute("index")
+    let array = matrix_2D[index]
+    d3.selectAll('.paths').transition().duration(500)
+      .attr('opacity', (_, i) => {
+        if (array.indexOf(i) !== -1) return 0.8
+        return 0.2
+      })
+      .attr('stroke-width', (_, i) => {
+        if (array.indexOf(i) !== -1) return 2
+        return 1.5
+      })
+  }
 
   reverseMatrix = (sourceArr) => {
     let reversedArr = [];

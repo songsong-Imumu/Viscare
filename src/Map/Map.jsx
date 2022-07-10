@@ -153,7 +153,7 @@ export default class NMap extends React.Component {
   componentWillUnmount() {
     let map = this.initMap();
     this.setState({ map: map });
-    this.drawLegend();
+    // this.drawLegend();
   }
   componentDidUpdate() {
     this.drawMap();
@@ -165,7 +165,7 @@ export default class NMap extends React.Component {
       <div id={`Map`} className={"framework"}>
         <Heading title={`Map View`}></Heading>
         <div id="map" style={{ height: height, width: width }}>
-          <svg id="mapsvg"></svg>
+          {/* <svg id="mapsvg"></svg> */}
         </div>
       </div>
     );
@@ -257,6 +257,9 @@ export default class NMap extends React.Component {
           "fill-color": color_expression,
         },
       });
+      // map.on('mouseover', 'fill', e => {
+      //   this.props.callback({ Province: e.features[0].properties.name })
+      // })
     });
     return map;
   };

@@ -4,8 +4,8 @@ import Heading from "../Heading/Heading.jsx";
 import * as d3 from "d3";
 export default class Network extends React.Component {
   state = {
-    width: 555,
-    height: 655,
+    width: 400,
+    height: 400,
     city: {
       Beijing: [116.28, 39.6],
       Shanghai: [121.29, 31.14],
@@ -186,20 +186,21 @@ export default class Network extends React.Component {
       .attr("style", "max-width: 100%; height: auto; height: intrinsic;")
       .attr("font-family", "sans-serif");
 
-    svg.selectAll('.c_Legend_text').data(d3.range(d3.max(cluster) + 1)).enter().append('text').attr('class', 'c_Legend_text')
-      .attr('x', (_, i) => i * 80 + 160)
-      .attr('y', 25)
-      .text((_, i) => {
-        let num = i + 1
-        let abs = 'Cluster_' + num
-        return abs
-      })
-      .attr('font-size', 12)
+    // svg.selectAll('.c_Legend_text').data(d3.range(d3.max(cluster) + 1)).enter().append('text').attr('class', 'c_Legend_text')
+    //   .attr('x', (_, i) => i * 65 + 155)
+    //   .attr('y', 25)
+    //   .text((_, i) => {
+    //     let num = i + 1
+    //     let abs = 'Cluster_' + num
+    //     return abs
+    //   })
+    //   .attr('font-size', 10)
+    svg.append('text').attr('x', 5).attr('y', height - 5).text('Clusters:')
     svg.selectAll('.c_Legend').data(d3.range(d3.max(cluster) + 1)).enter().append('rect').attr('class', 'c_Legend')
-      .attr('x', (_, i) => i * 80 + 140)
-      .attr('y', 13)
-      .attr('width', 15)
-      .attr('height', 15)
+      .attr('x', (_, i) => i * 12 + 70)
+      .attr('y', height - 15)
+      .attr('width', 12)
+      .attr('height', 12)
       // .attr('rx', 2)
       // .attr('ry', 2)
       .attr('index', (_, i) => i)
@@ -211,7 +212,7 @@ export default class Network extends React.Component {
         "link",
         d3.forceLink(edges).strength((d) => d.value)
       )
-      .force("charge", d3.forceManyBody().strength(-1100))
+      .force("charge", d3.forceManyBody().strength(-350))
       .force("center", d3.forceCenter(width / 2, height / 2))
       .force("x", d3.forceX())
       .force("y", d3.forceY())

@@ -12,17 +12,29 @@ export default class Root extends React.Component {
     Year: 2012,
     Province: "Beijing",
     Pattern: "Provinces",
+    Province_Array: new Array(30).fill(0).map((_, i) => i),
+    // Province_Array: [
+    //   8,
+    //   9,
+    //   10,
+    //   11,
+    //   12,
+    //   13,
+    //   14,
+    //   16,
+    //   15
+    // ]
   };
   render() {
-    const { Year, Province, Pattern } = this.state;
+    const { Year, Province, Pattern, Province_Array } = this.state;
     return (
       <div id="Root">
         <ControlPanel Year={Year} callback={this.getAttribute}></ControlPanel>
         <Network Year={Year}></Network>
         <Sunburst Year={Year}></Sunburst>
-        <NMap Year={Year} Pattern={Pattern}></NMap>
-        <TreeMap Year={Year} Province={Province}></TreeMap>
-        <Parallel Year={Year} callback={this.getParallelYear}></Parallel>
+        <NMap Year={Year} Pattern={Pattern} callback={this.getProvince}></NMap>
+        <TreeMap Year={Year} Province_Array={Province_Array} Province={Province}></TreeMap>
+        <Parallel Year={Year} Province={Province} Province_Array={Province_Array} callback={this.getParallelYear}></Parallel>
       </div>
     );
   }
@@ -31,7 +43,11 @@ export default class Root extends React.Component {
     this.setState({ Year: Year, Province: Province, Pattern: Pattern });
   };
   getParallelYear = (d) => {
-    const { Year } = d;
-    this.setState({ Year: Year })
+    const { Year, Province_Array } = d;
+    this.setState({ Year: Year, Province_Array: Province_Array })
+  }
+  getProvince = (d) => {
+    const { Province } = d;
+    this.setState({ Province: Province })
   }
 }

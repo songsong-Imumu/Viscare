@@ -21,15 +21,20 @@ export default class TreeMap extends React.Component {
     );
   }
   drawTreeMap = () => {
-    const { Year, Province } = this.props;
-    let dataset;
-    for (let i = 0; i < data[Year].length; i++) {
-      let d = data[Year][i];
-      if (d.name === Province) {
-        dataset = d;
-      }
-    }
-    // console.log(dataset);
+
+    const { Year, Province, Province_Array } = this.props;
+    let dataset = [];
+    // for (let i = 0; i < data[Year].length; i++) {
+    //   let d = data[Year][i];
+    //   if (d.name === Province) {
+    //     dataset = d;
+    //   }
+    // }
+    Province_Array.forEach(d => {
+      dataset.push(data[Year][d])
+    })
+    let result = this.treeSum(dataset)
+    dataset = result
     for (let i = 0; i < 4; i++) {
       let d = dataset.children[i].children;
       let temp = [];
@@ -62,8 +67,8 @@ export default class TreeMap extends React.Component {
           .reverse()
           .map((d) => d.data.name)
           .join(".")}\n${n.value.toLocaleString("en")}`,
-      width: 550,
-      height: 550,
+      width: 555,
+      height: 655,
     });
   };
 
@@ -83,8 +88,8 @@ export default class TreeMap extends React.Component {
       link, // given a leaf node d, its link (if any)
       linkTarget = "_blank", // the target attribute for links (if any)
       tile = d3.treemapBinary, // treemap strategy
-      width = 400, // outer width, in pixels
-      height = 300, // outer height, in pixels
+      width = 555, // outer width, in pixels
+      height = 655, // outer height, in pixels
       margin = 40, // shorthand for margins
       marginTop = margin, // top margin, in pixels
       marginRight = margin, // right margin, in pixels
@@ -170,15 +175,15 @@ export default class TreeMap extends React.Component {
     // .attr("transform", "translate(0,10)");
 
     svg.selectAll('.c_Legend_text').data(['Raw Coal', 'Crude Oil', 'Natural Gas', 'Process']).enter().append('text').attr('class', 'c_Legend_text')
-      .attr('x', (_, i) => i * 90 + 160)
-      .attr('y', -10)
+      .attr('x', (_, i) => i * 90 + 140)
+      .attr('y', -15)
       .text(d => d)
       .attr('font-size', 12)
     svg.selectAll('.c_Legend').data(d3.range(4)).enter().append('rect').attr('class', 'c_Legend')
-      .attr('x', (_, i) => i * 90 + 145)
-      .attr('y', -20)
-      .attr('width', 12)
-      .attr('height', 12)
+      .attr('x', (_, i) => i * 90 + 120)
+      .attr('y', -27)
+      .attr('width', 15)
+      .attr('height', 15)
       .attr('rx', 2)
       .attr('ry', 2)
       .attr('index', (_, i) => i)
@@ -249,6 +254,140 @@ export default class TreeMap extends React.Component {
 
     return Object.assign(svg.node(), { scales: { color } });
   };
+
+  treeSum = (data) => {
+    let raw_children = [0, 0, 0, 0, 0, 0, 0, 0]
+    let crude_children = [0, 0, 0, 0, 0, 0, 0, 0]
+    let natural_children = [0, 0, 0, 0, 0, 0, 0, 0]
+    let process_children = 0
+    for (let i = 0; i < data.length; i++) {
+      const rootChildren = data[i].children
+      const Raw_Coal_Children = rootChildren[0].children
+      const Crude_Oil_Children = rootChildren[1].children
+      const Natural_Gas_Children = rootChildren[3].children
+      const Process_Children = rootChildren[2].children
+      for (let j = 0; j < 8; j++) {
+        raw_children[j] += Raw_Coal_Children[j].value
+        crude_children[j] += Crude_Oil_Children[j].value
+        natural_children[j] += Natural_Gas_Children[j].value
+      }
+      process_children += Process_Children[0].value
+    }
+    return {
+      'name': '',
+      'children': [
+        {
+          'name': 'Raw Coal', 'children': [
+            {
+              "name": "Indigenous production",
+              "value": raw_children[0]
+            },
+            {
+              "name": "Import",
+              "value": raw_children[1]
+            },
+            {
+              "name": "Export (-)",
+              "value": raw_children[2]
+            },
+            {
+              "name": "Move in",
+              "value": raw_children[3]
+            },
+            {
+              "name": "Move out (-)",
+              "value": raw_children[4]
+            },
+            {
+              "name": "Stock decrease",
+              "value": raw_children[5]
+            },
+            {
+              "name": "Loss",
+              "value": raw_children[6]
+            },
+            {
+              "name": "Non-energy use",
+              "value": raw_children[7]
+            }
+          ]
+        },
+        {
+          'name': 'Crude Oil', 'children': [
+            {
+              "name": "Indigenous production",
+              "value": crude_children[0]
+            },
+            {
+              "name": "Import",
+              "value": crude_children[1]
+            },
+            {
+              "name": "Export (-)",
+              "value": crude_children[2]
+            },
+            {
+              "name": "Move in",
+              "value": crude_children[3]
+            },
+            {
+              "name": "Move out (-)",
+              "value": crude_children[4]
+            },
+            {
+              "name": "Stock decrease",
+              "value": crude_children[5]
+            },
+            {
+              "name": "Loss",
+              "value": crude_children[6]
+            },
+            {
+              "name": "Non-energy use",
+              "value": crude_children[7]
+            }
+          ]
+        },
+        {
+          'name': 'Natural Gas', 'children': [
+            {
+              "name": "Indigenous production",
+              "value": natural_children[0]
+            },
+            {
+              "name": "Import",
+              "value": natural_children[1]
+            },
+            {
+              "name": "Export (-)",
+              "value": natural_children[2]
+            },
+            {
+              "name": "Move in",
+              "value": natural_children[3]
+            },
+            {
+              "name": "Move out (-)",
+              "value": natural_children[4]
+            },
+            {
+              "name": "Stock decrease",
+              "value": natural_children[5]
+            },
+            {
+              "name": "Loss",
+              "value": natural_children[6]
+            },
+            {
+              "name": "Non-energy use",
+              "value": natural_children[7]
+            }
+          ]
+        },
+        { 'name': 'Process', 'children': [{ 'name': 'Cement', 'value': process_children }] }
+      ]
+    }
+  }
 
   route = (parent, root) => {
     let temp = root;

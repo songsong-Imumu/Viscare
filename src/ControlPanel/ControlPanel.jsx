@@ -51,6 +51,16 @@ export default class ControlPanel extends React.Component {
           <Col span={6}>
             <Button type="dashed">Pattern:</Button>
           </Col>
+          <Col span={8}>
+            <Select
+              defaultValue="Provinces"
+              style={{ width: 120 }}
+              onChange={this.changePattern}
+            >
+              <Option value="Provinces">Provinces</Option>
+              <Option value="Areas">Areas</Option>
+            </Select>
+          </Col>
           <Col span={10}>
             <Select
               defaultValue="Beijing"
@@ -87,16 +97,7 @@ export default class ControlPanel extends React.Component {
               <Option value="Ningxia">Ningxia</Option>
               <Option value="Xinjiang">Xinjiang</Option>
             </Select>
-          </Col>
-          <Col span={8}>
-            <Select
-              defaultValue="Provinces"
-              style={{ width: 120 }}
-              onChange={this.changePattern}
-            >
-              <Option value="Provinces">Provinces</Option>
-              <Option value="Areas">Areas</Option>
-            </Select>
+            {/* <Input value={Province} style={{ width: 150 }}></Input> */}
           </Col>
         </Row>
         <Row style={{ marginTop: 10, marginLeft: 5 }}>
