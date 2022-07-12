@@ -332,13 +332,13 @@ export default class Parallel extends React.Component {
       [18, 20, 17, 19, 21, 23, 24, 22, 16],
       [3, 2, 5, 4, 6, 7, 0, 1, 15, 14],
       [25, 26, 27, 28, 29, 22, 4, 6, 7],
-      [0, 1, 16, 15, 3, 25]
+      [0, 1, 16, 15, 3, 25],
     ],
     Year: 2012,
     Province_Array: new Array(30).fill(0).map((_, i) => i),
-    Province: 'Beijing'
+    Province: "Beijing",
   };
-  componentDidMount() { }
+  componentDidMount() {}
   componentWillUnmount() {
     this.drawParallel();
     // this.draw_P_Legend();
@@ -368,7 +368,7 @@ export default class Parallel extends React.Component {
       Cluster,
       leibies,
     } = this.state;
-    const { Year, Province, Province_Array } = this.props
+    const { Year, Province, Province_Array } = this.props;
 
     let nodes = [];
     let count = 0;
@@ -437,24 +437,34 @@ export default class Parallel extends React.Component {
       // .call(d3.zoom().scaleExtent([0.5, 6]).on("zoom", zoomed))
       .append("g");
 
-    svg.selectAll('.p_Legend_text').data(d3.range(5)).enter().append('text').attr('class', 'p_Legend_text')
-      .attr('x', (_, i) => i * 150 + 205)
-      .attr('y', 25)
+    svg
+      .selectAll(".p_Legend_text")
+      .data(d3.range(5))
+      .enter()
+      .append("text")
+      .attr("class", "p_Legend_text")
+      .attr("x", (_, i) => i * 150 + 205)
+      .attr("y", 25)
       .text((_, i) => {
-        let num = i + 1
-        let abs = 'Cluster_' + num
-        return abs
+        let num = i + 1;
+        let abs = "Cluster_" + num;
+        return abs;
       })
-      .attr('font-size', 12)
-    svg.selectAll('.p_Legend').data(d3.range(5)).enter().append('rect').attr('class', 'p_Legend')
-      .attr('x', (_, i) => i * 150 + 180)
-      .attr('y', 13)
-      .attr('width', 15)
-      .attr('height', 15)
+      .attr("font-size", 12);
+    svg
+      .selectAll(".p_Legend")
+      .data(d3.range(5))
+      .enter()
+      .append("rect")
+      .attr("class", "p_Legend")
+      .attr("x", (_, i) => i * 150 + 180)
+      .attr("y", 13)
+      .attr("width", 15)
+      .attr("height", 15)
       // .attr('rx', 2)
       // .attr('ry', 2)
-      .attr('index', (_, i) => i)
-      .attr('fill', (_, i) => colors[i])
+      .attr("index", (_, i) => i)
+      .attr("fill", (_, i) => colors[i]);
 
     let g = svg.append("g");
     let rects_number = [];
@@ -569,24 +579,23 @@ export default class Parallel extends React.Component {
         return line(d["value"]);
       })
       .attr("fill", "none")
-      .attr("stroke", 'darkgray')
+      .attr("stroke", "darkgray")
       .attr("stroke-width", 3)
       .attr("transform", "translate(85,-13)")
       // .attr("opacity", d => {
       //   return d.name === Province ? 1 : 0.2
       // })
-      .attr('opacity', 0.5)
-      .on('mouseover', function (_, d) {
-        d3.select(this).append('title').text(d.name)
+      .attr("opacity", 0.5)
+      .on("mouseover", function (_, d) {
+        d3.select(this).append("title").text(d.name);
       })
       .on("click", (e, d) => {
         // console.log(d, i)
-        d3.selectAll(".paths")
-          .transition()
-          .duration(500)
-          .attr("opacity", _d => d === _d ? 1 : 0.2)
+
         // this.setState({ Province: d['name'] })
-        // this.props.callback({ Year: this.state.Year, Province: d['name'], Province_Array: this.state.Province_Array })
+        this.props.callback({
+          Province: d["name"],
+        });
         // d3.select(this)
         //   .transition()
         //   .duration(1000)
@@ -598,7 +607,14 @@ export default class Parallel extends React.Component {
         // })
         // highlightMap2([provinces[i]]);
       });
-
+    let p = this.props.Province;
+    d3.selectAll(".paths")
+      .transition()
+      .duration(500)
+      .attr("opacity", (d) => {
+        if (p === "") return 1;
+        return d.name === p ? 1 : 0.2;
+      });
 
     count = -1;
     let y_count = 0;
@@ -608,14 +624,15 @@ export default class Parallel extends React.Component {
         matrix_2D.push(matrix_3D[i][j]);
     }
     for (let i = 0; i < 20; i++) {
-      svg.append('text')
-        .attr('x', i * 66 + 75)
-        .attr('y', height - 10)
+      svg
+        .append("text")
+        .attr("x", i * 66 + 75)
+        .attr("y", height - 10)
         .text(i + 1998)
-        .attr('stroke', () => {
+        .attr("stroke", () => {
           // console.log(i + 1998, Year)
-          return i + 1998 === Year ? 'black' : 'darkgray'
-        })
+          return i + 1998 === Year ? "black" : "darkgray";
+        });
     }
     let yearCount = 0;
     svg
@@ -636,7 +653,7 @@ export default class Parallel extends React.Component {
           return 55;
         }
       })
-      .attr('yearCount', (d, i) => {
+      .attr("yearCount", (d, i) => {
         if (i != 0) {
           if (d < rects_number[i - 1]) {
             yearCount++;
@@ -686,58 +703,68 @@ export default class Parallel extends React.Component {
       .attr("stroke", (_, i) => {
         return colors[Cluster[i]];
       })
-      .attr('index', (_, i) => i)
+      .attr("index", (_, i) => i)
       .attr("stroke-width", 1.5)
-      .attr('opacity', 0.9)
+      .attr("opacity", 0.9)
       .attr("transform", "translate(30,-10)")
-      .on('click', (e, d) => {
+      .on("click", (e, d) => {
         // console.log(e, d)
-        let index = e.currentTarget.getAttribute("index")
-        let array = matrix_2D[index]
+        let index = e.currentTarget.getAttribute("index");
+        let array = matrix_2D[index];
         // console.log(array)
         // console.log(this.props.Year)
         // console.log(matrix_3D[this.props.Year - 1998].indexOf(array))
-        let Year = e.currentTarget.getAttribute('yearCount')
+        let Year = e.currentTarget.getAttribute("yearCount");
 
-        d3.selectAll('.paths')
-          .attr('opacity', (_, i) => {
-            if (array.indexOf(i) !== -1) { return 0.8 }
-            return 0.2
+        d3.selectAll(".paths")
+          .attr("opacity", (_, i) => {
+            if (array.indexOf(i) !== -1) {
+              return 0.8;
+            }
+            return 0.2;
           })
-          .attr('stroke-width', (_, i) => {
-            if (array.indexOf(i) !== -1) return 3
-            return 1.5
-          })
+          .attr("stroke-width", (_, i) => {
+            if (array.indexOf(i) !== -1) return 3;
+            return 1.5;
+          });
         // console.log(this.state.Cluster[index])
-        this.props.callback({ Year: parseInt(Year) + 1998, Province_Array: array, Cluster: `Cluster_${this.state.Cluster[index] + 1}` })
+        this.props.callback({
+          Year: parseInt(Year) + 1998,
+          Province_Array: array,
+          Cluster: `Cluster_${this.state.Cluster[index] + 1}`,
+        });
       });
 
-    let array = Province_Array
+    let array = Province_Array;
 
-    d3.selectAll('.paths')
-      .attr('opacity', (_, i) => {
-        if (array.indexOf(i) !== -1) { return 0.8 }
-        return 0.2
+    d3.selectAll(".paths")
+      .attr("opacity", (_, i) => {
+        if (array.indexOf(i) !== -1) {
+          return 0.8;
+        }
+        return 0.2;
       })
-      .attr('stroke-width', (_, i) => {
-        if (array.indexOf(i) !== -1) return 3
-        return 1.5
-      })
+      .attr("stroke-width", (_, i) => {
+        if (array.indexOf(i) !== -1) return 3;
+        return 1.5;
+      });
   };
 
   highlightlines = (e, d, matrix_2D) => {
-    let index = e.currentTarget.getAttribute("index")
-    let array = matrix_2D[index]
-    d3.selectAll('.paths').transition().duration(500)
-      .attr('opacity', (_, i) => {
-        if (array.indexOf(i) !== -1) return 0.8
-        return 0.2
+    let index = e.currentTarget.getAttribute("index");
+    let array = matrix_2D[index];
+    d3.selectAll(".paths")
+      .transition()
+      .duration(500)
+      .attr("opacity", (_, i) => {
+        if (array.indexOf(i) !== -1) return 0.8;
+        return 0.2;
       })
-      .attr('stroke-width', (_, i) => {
-        if (array.indexOf(i) !== -1) return 2
-        return 1.5
-      })
-  }
+      .attr("stroke-width", (_, i) => {
+        if (array.indexOf(i) !== -1) return 2;
+        return 1.5;
+      });
+  };
 
   reverseMatrix = (sourceArr) => {
     let reversedArr = [];
@@ -751,65 +778,85 @@ export default class Parallel extends React.Component {
   };
 
   draw_P_Legend = () => {
-    const { width, height, colors, leibies, matrix_2D_t, matrix_2D, matrix, rects_num, Cluster } = this.state
+    const {
+      width,
+      height,
+      colors,
+      leibies,
+      matrix_2D_t,
+      matrix_2D,
+      matrix,
+      rects_num,
+      Cluster,
+    } = this.state;
 
-    d3.select('#p_legend').remove()
-    var svg = d3.select('#Parallel')
-      .append('svg')
-      .attr('width', width + 50)
-      .attr('height', height)
-      .attr('id', 'p_legend')
+    d3.select("#p_legend").remove();
+    var svg = d3
+      .select("#Parallel")
+      .append("svg")
+      .attr("width", width + 50)
+      .attr("height", height)
+      .attr("id", "p_legend");
 
-    let svg_ab = d3.select('#parallel')
+    let svg_ab = d3.select("#parallel");
 
-    svg.selectAll('.p_Legend_text').data(d3.range(5)).enter().append('text').attr('class', 'p_Legend_text')
-      .attr('x', (_, i) => i * 150 + 205)
-      .attr('y', 25)
+    svg
+      .selectAll(".p_Legend_text")
+      .data(d3.range(5))
+      .enter()
+      .append("text")
+      .attr("class", "p_Legend_text")
+      .attr("x", (_, i) => i * 150 + 205)
+      .attr("y", 25)
       .text((_, i) => {
-        let num = i + 1
-        let abs = 'Cluster_' + num
-        return abs
+        let num = i + 1;
+        let abs = "Cluster_" + num;
+        return abs;
       })
-      .attr('font-size', 12)
-    svg.selectAll('.p_Legend').data(d3.range(5)).enter().append('rect').attr('class', 'p_Legend')
-      .attr('x', (_, i) => i * 150 + 180)
-      .attr('y', 13)
-      .attr('width', 15)
-      .attr('height', 15)
+      .attr("font-size", 12);
+    svg
+      .selectAll(".p_Legend")
+      .data(d3.range(5))
+      .enter()
+      .append("rect")
+      .attr("class", "p_Legend")
+      .attr("x", (_, i) => i * 150 + 180)
+      .attr("y", 13)
+      .attr("width", 15)
+      .attr("height", 15)
       // .attr('rx', 2)
       // .attr('ry', 2)
-      .attr('index', (_, i) => i)
-      .attr('fill', (_, i) => colors[i])
-      .on('click', (e, i) => {
-        let index = e.currentTarget.getAttribute('index')
+      .attr("index", (_, i) => i)
+      .attr("fill", (_, i) => colors[i])
+      .on("click", (e, i) => {
+        let index = e.currentTarget.getAttribute("index");
         // let array = matrix_2D[index]
         // index = i
-        d3.selectAll('.paths').transition().duration(500)
-          .attr('opacity', 0.1)
+        d3.selectAll(".paths").transition().duration(500).attr("opacity", 0.1);
 
-        let path = []
-        let total_lines = []
-        let array = matrix_2D_t[index]
+        let path = [];
+        let total_lines = [];
+        let array = matrix_2D_t[index];
 
-        let focus = [] //重心
-        let clusters_num = []
+        let focus = []; //重心
+        let clusters_num = [];
         for (let key in rects_num) {
-          let list = rects_num[key]
-          let numbers = []
-          let abab = []
+          let list = rects_num[key];
+          let numbers = [];
+          let abab = [];
           for (let i = 0; i < list.length; i++) {
-            let x = list[i]
+            let x = list[i];
             for (let j = 0; j < x; j++) {
-              numbers.push(x)
-              abab.push(i)
+              numbers.push(x);
+              abab.push(i);
             }
           }
-          focus.push(numbers)
-          clusters_num.push(abab)
+          focus.push(numbers);
+          clusters_num.push(abab);
         }
 
         // focus = reverseMatrix(focus)
-        clusters_num = this.reverseMatrix(clusters_num)
+        clusters_num = this.reverseMatrix(clusters_num);
 
         let rects_number = [];
         for (let key in rects_num) {
@@ -820,33 +867,34 @@ export default class Parallel extends React.Component {
             rects_number.push(sum);
           }
         }
-        let list = []
+        let list = [];
         for (let i = 0; i < focus.length; i++) {
-          let ab = []
+          let ab = [];
           for (let j = 0; j < focus[i].length; j++) {
-            ab.push(focus[i][j])
+            ab.push(focus[i][j]);
           }
-          list.push(ab)
+          list.push(ab);
         }
         for (let i = 0; i < focus.length; i++) {
-          let count = 0
+          let count = 0;
           for (let j = 0; j < focus[i].length; j++) {
-            if (j === 0) focus[i][j] = focus[i][j] / 2
+            if (j === 0) focus[i][j] = focus[i][j] / 2;
             else if (list[i][j] !== list[i][j - 1]) {
-              count = 0
+              count = 0;
               // focus[i][j] = focus[i][j] + focus[i][j - 1]
-              focus[i][j] = (j + 1 + j + focus[i][j]) / 2
-            } else if (count === list[i][j]) { //处理两个相同个数的类出现在一块
-              focus[i][j] = (j + 1 + j + focus[i][j]) / 2
-            } else if (list[i][j] === list[i][j - 1]) focus[i][j] = focus[i][j - 1]
-            count += 1
+              focus[i][j] = (j + 1 + j + focus[i][j]) / 2;
+            } else if (count === list[i][j]) {
+              //处理两个相同个数的类出现在一块
+              focus[i][j] = (j + 1 + j + focus[i][j]) / 2;
+            } else if (list[i][j] === list[i][j - 1])
+              focus[i][j] = focus[i][j - 1];
+            count += 1;
           }
         }
-        focus = this.reverseMatrix(focus)
-
+        focus = this.reverseMatrix(focus);
 
         let lines = [];
-        let line = []
+        let line = [];
         let jizhunlei;
         let block;
         let head;
@@ -854,140 +902,192 @@ export default class Parallel extends React.Component {
         let pre;
         let y;
 
-        for (let i = 0; i < 30; i++) { //every province
-          if (array.indexOf(i) === -1) continue
-          y = [] //y position
-          for (let j = 0; j < matrix.length; j++) { //number of year
-            list = matrix[j]
-            y.push(list.indexOf(i)) //位置数组
+        for (let i = 0; i < 30; i++) {
+          //every province
+          if (array.indexOf(i) === -1) continue;
+          y = []; //y position
+          for (let j = 0; j < matrix.length; j++) {
+            //number of year
+            list = matrix[j];
+            y.push(list.indexOf(i)); //位置数组
           }
-          lines = [] // get path postion
-          line = []
-          jizhunlei = parseInt(index)
+          lines = []; // get path postion
+          line = [];
+          jizhunlei = parseInt(index);
           // jizhunlei = leibies[i][0]
-
 
           for (let k = 0; k < 40; k++) {
             if (k % 2 === 0) {
-              block = clusters_num[y[k / 2]][k / 2] //块外间距
-              head = focus[y[k / 2]][k / 2] //重心 块内间距
+              block = clusters_num[y[k / 2]][k / 2]; //块外间距
+              head = focus[y[k / 2]][k / 2]; //重心 块内间距
               // y_position[k/2]  位置数组
               // leibie = index_array(y_position[k/2],y[k/2])
               // leibies.push(index_array(y_position[k/2],y[k/2]))
-              aft = leibies[i][k / 2]
-              pre = leibies[i][k / 2 - 1]
-              console.log(leibies)
+              aft = leibies[i][k / 2];
+              pre = leibies[i][k / 2 - 1];
+              console.log(leibies);
               // console.log(pre, aft, jizhunlei)
-              if ((pre === aft && pre === jizhunlei) || (pre === aft && aft === jizhunlei) || pre === jizhunlei || aft === jizhunlei) {
+              if (
+                (pre === aft && pre === jizhunlei) ||
+                (pre === aft && aft === jizhunlei) ||
+                pre === jizhunlei ||
+                aft === jizhunlei
+              ) {
                 if (pre === aft)
-                  line.push([k * 33, y[k / 2] * 9 + 58 + 10 * block + 2.0 * (head - y[k / 2]), '#377eb8'])
+                  line.push([
+                    k * 33,
+                    y[k / 2] * 9 + 58 + 10 * block + 2.0 * (head - y[k / 2]),
+                    "#377eb8",
+                  ]);
                 else if (pre !== jizhunlei)
-                  line.push([k * 33, y[k / 2] * 9 + 58 + 10 * block + 2.0 * (head - y[k / 2]), '#4daf4a'])
+                  line.push([
+                    k * 33,
+                    y[k / 2] * 9 + 58 + 10 * block + 2.0 * (head - y[k / 2]),
+                    "#4daf4a",
+                  ]);
                 else if (aft !== jizhunlei)
-                  line.push([k * 33, y[k / 2] * 9 + 58 + 10 * block + 2.0 * (head - y[k / 2]), '#e41a1c'])
+                  line.push([
+                    k * 33,
+                    y[k / 2] * 9 + 58 + 10 * block + 2.0 * (head - y[k / 2]),
+                    "#e41a1c",
+                  ]);
 
-                if (k != 0) { total_lines.push(line) }
+                if (k != 0) {
+                  total_lines.push(line);
+                }
               }
-              line = []
-              lines.push([k * 33, y[k / 2] * 9 + 58 + 10 * block + 2.0 * (head - y[k / 2])])
+              line = [];
+              lines.push([
+                k * 33,
+                y[k / 2] * 9 + 58 + 10 * block + 2.0 * (head - y[k / 2]),
+              ]);
             } else {
-              lines.push([lines[k - 1][0] + 10, lines[k - 1][1]])
-              line.push([lines[k - 1][0] + 10, lines[k - 1][1]])
+              lines.push([lines[k - 1][0] + 10, lines[k - 1][1]]);
+              line.push([lines[k - 1][0] + 10, lines[k - 1][1]]);
             }
           }
         }
-        line = d3.line()
-          .x(d => d[0])
-          .y(d => d[1])
-          .curve(d3.curveMonotoneX)
+        line = d3
+          .line()
+          .x((d) => d[0])
+          .y((d) => d[1])
+          .curve(d3.curveMonotoneX);
         for (let i = 0; i < total_lines.length; i++) {
-          total_lines[i].push(total_lines[i][1])
-          total_lines[i][1] = total_lines[i][0]
-          total_lines[i][0] = [total_lines[i][1][0] - 10, total_lines[i][1][1]]
-          total_lines[i].push([total_lines[i][2][0] + 10, total_lines[i][2][1]])
+          total_lines[i].push(total_lines[i][1]);
+          total_lines[i][1] = total_lines[i][0];
+          total_lines[i][0] = [total_lines[i][1][0] - 10, total_lines[i][1][1]];
+          total_lines[i].push([
+            total_lines[i][2][0] + 10,
+            total_lines[i][2][1],
+          ]);
         }
-        d3.selectAll('.abab').remove()
+        d3.selectAll(".abab").remove();
         for (let j = 0; j < total_lines.length; j++) {
-          svg = d3.select('#parallel')
-          svg.append('path').attr('class', 'abab')
-            .attr('d', line(total_lines[j]))
-            .attr('fill', 'none')
-            .attr('stroke', () => total_lines[j][2][2])
-            .attr('stroke-width', 2.5)
-            .attr('stroke-opacity', 0.5)
-            .attr('transform', 'translate(85,-13)')
+          svg = d3.select("#parallel");
+          svg
+            .append("path")
+            .attr("class", "abab")
+            .attr("d", line(total_lines[j]))
+            .attr("fill", "none")
+            .attr("stroke", () => total_lines[j][2][2])
+            .attr("stroke-width", 2.5)
+            .attr("stroke-opacity", 0.5)
+            .attr("transform", "translate(85,-13)");
         }
-        svg.selectAll('.parallel').remove()
-        let count = -1
-        let y_count = 0
+        svg.selectAll(".parallel").remove();
+        let count = -1;
+        let y_count = 0;
 
-        svg.selectAll('.parallel').data(rects_number).enter().append('rect').attr('class', 'parallel')
-          .attr('x', (d, i) => {
+        svg
+          .selectAll(".parallel")
+          .data(rects_number)
+          .enter()
+          .append("rect")
+          .attr("class", "parallel")
+          .attr("x", (d, i) => {
             if (i !== 0) {
               if (d < rects_number[i - 1]) {
-                count += 1
-                return count * 66 + 120
+                count += 1;
+                return count * 66 + 120;
               } else {
-                return count * 66 + 120
+                return count * 66 + 120;
               }
             } else {
-              return 55
+              return 55;
             }
           })
-          .attr('y', (d, i) => {
+          .attr("y", (d, i) => {
             if (i === 0) {
-              y_count = 0
-              return 58
+              y_count = 0;
+              return 58;
             }
             if (d < rects_number[i - 1]) {
-              y_count = 0
+              y_count = 0;
               // console.log(d)
-              return 58 + d / 1.5
+              return 58 + d / 1.5;
             } else {
-              y_count += 1
-              return 58 + (rects_number[i - 1]) * 9 + 10 * y_count +
+              y_count += 1;
+              return (
+                58 +
+                rects_number[i - 1] * 9 +
+                10 * y_count +
                 (d - rects_number[i - 1]) / 1.5
+              );
             }
           })
-          .attr('rx', 2)
-          .attr('ry', 2)
-          .attr('height', (d, i) => {
+          .attr("rx", 2)
+          .attr("ry", 2)
+          .attr("height", (d, i) => {
             if (i !== 0) {
               if (d < rects_number[i - 1]) {
-                return d * 9 / 1.5
+                return (d * 9) / 1.5;
               } else {
-                return (d - rects_number[i - 1]) * 9 / 1.5
+                return ((d - rects_number[i - 1]) * 9) / 1.5;
               }
-            } else return d * 9
+            } else return d * 9;
           })
-          .attr('width', 10)
-          .attr('fill', (_, i) => {
-            return colors[Cluster[i]]
+          .attr("width", 10)
+          .attr("fill", (_, i) => {
+            return colors[Cluster[i]];
           })
           // .attr('fill-opacity',0.7)
-          .attr('stroke', (_, i) => {
-            return colors[Cluster[i]]
+          .attr("stroke", (_, i) => {
+            return colors[Cluster[i]];
           })
-          .attr('stroke-width', 1.5)
-          .attr('opacity', 0.9)
-          .attr('transform', 'translate(30,-10)')
+          .attr("stroke-width", 1.5)
+          .attr("opacity", 0.9)
+          .attr("transform", "translate(30,-10)");
 
-        svg = d3.select('#parallel')
-        let ab_text = ['Stable', 'Aggregate', 'Detach']
-        svg.selectAll('.p_text').data(ab_text).enter().append('text').attr('class', 'p_text').transition().duration(500)
-          .attr('x', 10)
-          .attr('y', (_, i) => 80 * i + 110)
-          .text(d => d)
-          .attr('font-size', 10)
+        svg = d3.select("#parallel");
+        let ab_text = ["Stable", "Aggregate", "Detach"];
+        svg
+          .selectAll(".p_text")
+          .data(ab_text)
+          .enter()
+          .append("text")
+          .attr("class", "p_text")
+          .transition()
+          .duration(500)
+          .attr("x", 10)
+          .attr("y", (_, i) => 80 * i + 110)
+          .text((d) => d)
+          .attr("font-size", 10);
         // abcolors = ['aqua', 'lime', 'red']
-        let abcolors = ["#377eb8", "#4daf4a", "#e41a1c"]
-        svg.selectAll('.p_line').data(abcolors).enter().append('line').attr('class', 'p_line').transition().duration(500)
-          .attr('x1', 10)
-          .attr('x2', 45)
-          .attr('y1', (_, i) => 80 * i + 120)
-          .attr('y2', (_, i) => 80 * i + 120)
-          .attr('stroke', (_, i) => abcolors[i])
-          .attr('stroke-width', 3)
-      })
-  }
+        let abcolors = ["#377eb8", "#4daf4a", "#e41a1c"];
+        svg
+          .selectAll(".p_line")
+          .data(abcolors)
+          .enter()
+          .append("line")
+          .attr("class", "p_line")
+          .transition()
+          .duration(500)
+          .attr("x1", 10)
+          .attr("x2", 45)
+          .attr("y1", (_, i) => 80 * i + 120)
+          .attr("y2", (_, i) => 80 * i + 120)
+          .attr("stroke", (_, i) => abcolors[i])
+          .attr("stroke-width", 3);
+      });
+  };
 }

@@ -41,21 +41,14 @@ export default class NMap extends React.Component {
       "Xinjiang",
     ],
     colors: {
-      red: [
-        '#FFC5AC',
-        '#FF895D',
-        '#F3470D',
-        '#A4300C'
-      ],
+      red: ["#FFC5AC", "#FF895D", "#F3470D", "#A4300C"],
       // red: [
       //   "rgb(255,197,172)",
       //   "rgb(255,137,93)",
       //   "rgb(243,71,13)",
       //   "rgb(164,48,12)",
       // ],
-      green: [
-        '#c1e8c5', '#65cf9b', '#16a37e', '#10686c'
-      ],
+      green: ["#c1e8c5", "#65cf9b", "#16a37e", "#10686c"],
       blue: [
         "rgb(201,233,255)",
         "rgb(138,212,255)",
@@ -158,7 +151,7 @@ export default class NMap extends React.Component {
       "#17becf",
     ],
   };
-  componentDidMount() { }
+  componentDidMount() {}
   componentWillUnmount() {
     let map = this.initMap();
     this.setState({ map: map });
@@ -179,12 +172,11 @@ export default class NMap extends React.Component {
             <svg id="MapSvg" style={{ width: 830, height: 655 }}></svg>
           </div>
         </div>
-
       </div>
     );
   }
   initMap = () => {
-    const { Year } = this.props;
+    const { Year, Province } = this.props;
     const { provinces } = this.state;
     const data = require(`../data/province_emissions_apparent/province_emissions_apparent_${Year}.json`);
     mapboxgl.accessToken =
@@ -201,28 +193,51 @@ export default class NMap extends React.Component {
       maxZoom: 3.1,
       // dragPan: true,
     });
-    const svg = d3.select('#MapSvg')
-    const red = 'rgb(255,46,49)'
-    const green = 'rgb(15,140,15)'
+    const svg = d3.select("#MapSvg");
+    const red = "rgb(255,46,49)";
+    const green = "rgb(15,140,15)";
     for (let i = 0; i <= 10; i++) {
-      svg.append('rect')
-        .attr('y', i * 5 + 50)
-        .attr('x', 30)
-        .attr('width', 5)
-        .attr('height', 5)
-        .attr('fill', red)
-        .attr('fill-opacity', (10 - i) * 10 / 100)
-      svg.append('rect')
-        .attr('y', i * 5 + 100)
-        .attr('x', 30)
-        .attr('width', 5)
-        .attr('height', 5)
-        .attr('fill', green)
-        .attr('fill-opacity', i * 10 / 100)
+      svg
+        .append("rect")
+        .attr("y", i * 5 + 50)
+        .attr("x", 30)
+        .attr("width", 5)
+        .attr("height", 5)
+        .attr("fill", red)
+        .attr("fill-opacity", ((10 - i) * 10) / 100);
+      svg
+        .append("rect")
+        .attr("y", i * 5 + 100)
+        .attr("x", 30)
+        .attr("width", 5)
+        .attr("height", 5)
+        .attr("fill", green)
+        .attr("fill-opacity", (i * 10) / 100);
     }
-    svg.append('text').attr('x', 30).attr('y', 50).text('max').attr('font-size', 12).attr('dx',8).attr('dy',3)
-    svg.append('text').attr('x', 30).attr('y', 100).text('mean').attr('font-size', 12).attr('dx',8).attr('dy',3)
-    svg.append('text').attr('x', 30).attr('y', 150).text('min').attr('font-size', 12).attr('dx',8).attr('dy',3)
+    svg
+      .append("text")
+      .attr("x", 30)
+      .attr("y", 50)
+      .text("max")
+      .attr("font-size", 12)
+      .attr("dx", 8)
+      .attr("dy", 3);
+    svg
+      .append("text")
+      .attr("x", 30)
+      .attr("y", 100)
+      .text("mean")
+      .attr("font-size", 12)
+      .attr("dx", 8)
+      .attr("dy", 3);
+    svg
+      .append("text")
+      .attr("x", 30)
+      .attr("y", 150)
+      .text("min")
+      .attr("font-size", 12)
+      .attr("dx", 8)
+      .attr("dy", 3);
     let dataset = [];
     for (let key in data) {
       dataset.push(data[key]);
@@ -265,15 +280,18 @@ export default class NMap extends React.Component {
     for (let i = 0; i < 30; i++) {
       if (dataset[i] - mean > 0) {
         x = scale_1(dataset[i] - mean);
-        color_expression.push(provinces[i], 'rgb(255,46,49)');
+        color_expression.push(provinces[i], "rgb(255,46,49)");
         expression.push(provinces[i], 1 * x);
       } else {
         x = scale_2(mean - dataset[i]);
-        color_expression.push(provinces[i], 'rgb(15,140,15)');
+        color_expression.push(provinces[i], "rgb(15,140,15)");
         expression.push(provinces[i], 1 * x);
       }
     }
     expression.push(0.5);
+    let province_expression = ["match", ["get", "name"]];
+    // province_expression.push(Province, "rgb(255,255,0)");
+    // province_expression.push("rgba(0,0,0,0)");
     color_expression.push("#AAAAAA");
     map.on("load", () => {
       map.addSource("China", {
@@ -290,7 +308,17 @@ export default class NMap extends React.Component {
         source: "China",
         paint: {
           "fill-color": color_expression,
-          'fill-opacity': expression
+          "fill-opacity": expression,
+        },
+      });
+      map.addLayer({
+        id: "border",
+        type: "line",
+        source: "China",
+        layout: {},
+        paint: {
+          "line-color": province_expression,
+          "line-width": 2,
         },
       });
       // map.on('mouseover', 'fill', e => {
@@ -300,7 +328,7 @@ export default class NMap extends React.Component {
     return map;
   };
   drawMap = () => {
-    const { Year, Pattern } = this.props;
+    const { Year, Pattern, Province } = this.props;
     const { provinces, map, clustersColors, clusters } = this.state;
     if (Pattern === "Provinces") {
       const data = require(`../data/province_emissions_apparent/province_emissions_apparent_${Year}.json`);
@@ -334,27 +362,44 @@ export default class NMap extends React.Component {
       for (let i = 0; i < 30; i++) {
         if (dataset[i] - mean > 0) {
           x = scale_1(dataset[i] - mean);
-          color_expression.push(provinces[i], 'rgb(255,46,49)');
+          color_expression.push(provinces[i], "rgb(255,46,49)");
           expression.push(provinces[i], 1 * x);
         } else {
           x = scale_2(mean - dataset[i]);
-          color_expression.push(provinces[i], 'rgb(15,140,15)');
+          color_expression.push(provinces[i], "rgb(15,140,15)");
           expression.push(provinces[i], 1 * x);
         }
       }
       expression.push(0.5);
       color_expression.push("#AAAAAA");
+      let province_expression = ["match", ["get", "name"]];
+      province_expression.push(Province, "rgb(255,255,0)");
+      console.log(province_expression);
+      province_expression.push("rgba(0,0,0,0)");
       if (map.getLayer("fill")) {
         map.removeLayer("fill");
+        map.removeLayer("border");
         map.addLayer({
           id: "fill",
           type: "fill",
           source: "China",
           paint: {
             "fill-color": color_expression,
-            'fill-opacity': expression
+            "fill-opacity": expression,
           },
         });
+        map.addLayer({
+          id: "border",
+          type: "line",
+          source: "China",
+          layout: {},
+          paint: {
+            "line-color": province_expression,
+            "line-width": 2,
+          },
+        });
+      }
+      if (map.getLayer("border")) {
       }
     } else {
       const scale = d3.scaleLinear().domain([1998, 2017]).range([0, 19]);
@@ -382,137 +427,151 @@ export default class NMap extends React.Component {
   drawLegend = () => {
     const red = this.state.colors.red;
     const blue = this.state.colors.blue;
-    let svg = d3.select('#mapsvg')
-    d3.selectAll('.red')
-      .attr('data', red)
-      .append('rect')
-      .attr('x', 20)
-      .attr('y', (_, i) => i * 20 + 100)
-      .attr('width', 20)
-      .attr('height', 20)
-  }
+    let svg = d3.select("#mapsvg");
+    d3.selectAll(".red")
+      .attr("data", red)
+      .append("rect")
+      .attr("x", 20)
+      .attr("y", (_, i) => i * 20 + 100)
+      .attr("width", 20)
+      .attr("height", 20);
+  };
   drawLine = (angle = 1) => {
     const { Year, DrawLine } = this.props;
-    if (DrawLine === false) return
-    console.log('drawLine a')
-    if (!document.getElementById('MAP_LINE')) {
-      var div = document.createElement('div')
-      div.setAttribute('id', 'MAP_LINE')
-      document.getElementById('map').appendChild(div)
+    if (DrawLine === false) return;
+    console.log("drawLine a");
+    if (!document.getElementById("MAP_LINE")) {
+      var div = document.createElement("div");
+      div.setAttribute("id", "MAP_LINE");
+      document.getElementById("map").appendChild(div);
     }
-    const width = 830
-    const height = 655
+    const width = 830;
+    const height = 655;
     function f(sigma, μ, x, f_x) {
-      return f_x * (1 / (Math.pow(2 * Math.PI, 1 / 2) * sigma)) * Math.exp(-Math.pow((x - μ), 2) / 2 * Math.pow(sigma, 2))
+      return (
+        f_x *
+        (1 / (Math.pow(2 * Math.PI, 1 / 2) * sigma)) *
+        Math.exp((-Math.pow(x - μ, 2) / 2) * Math.pow(sigma, 2))
+      );
     }
-    const emissions = require(`../data/province_emissions_apparent/province_emissions_apparent_${Year}.json`)
-    const data = require(`../data/China_city_English.json`)
+    const emissions = require(`../data/province_emissions_apparent/province_emissions_apparent_${Year}.json`);
+    const data = require(`../data/China_city_English.json`);
     let flag = 1;
-    let roll = 10 * (angle - 1)
-    let initial_angle = Math.atan(464.56 / 601.36) * 180 / Math.PI
-    let end_angle = roll - initial_angle
+    let roll = 10 * (angle - 1);
+    let initial_angle = (Math.atan(464.56 / 601.36) * 180) / Math.PI;
+    let end_angle = roll - initial_angle;
     // document.getElementById('range_center').removeAttribute('disabled')
-    angle = 1
+    angle = 1;
     // center = document.getElementById('range_center').value
-    let σ = 0.1
-    let svg = d3.select('#MAP_LINE')
-      .append('svg')
-      .attr('width', width)
-      .attr('height', height)
-      .attr('id', 'LINE')
-      .append("g")
-    let g = svg.append('g')
-    svg.append('line').attr('class', 'Line') //.transition().duration(500)
-      .attr('x1', 0)
-      .attr('y1', height)
-      .attr('x2', width)
-      .attr('y2', 0)
-      .attr('stroke', 'black')
-      .attr('opacity', 0.3)
-    let dataset = []
-    let position = []
-    for (let item in data['features']) {
-      if (data['features'][item]['propertise']['name'] == 'Xizang') continue
+    let σ = 0.1;
+    let svg = d3
+      .select("#MAP_LINE")
+      .append("svg")
+      .attr("width", width)
+      .attr("height", height)
+      .attr("id", "LINE")
+      .append("g");
+    let g = svg.append("g");
+    svg
+      .append("line")
+      .attr("class", "Line") //.transition().duration(500)
+      .attr("x1", 0)
+      .attr("y1", height)
+      .attr("x2", width)
+      .attr("y2", 0)
+      .attr("stroke", "black")
+      .attr("opacity", 0.3);
+    let dataset = [];
+    let position = [];
+    for (let item in data["features"]) {
+      if (data["features"][item]["propertise"]["name"] == "Xizang") continue;
       dataset.push([
-        data['features'][item]['propertise']['name'],
-        data['features'][item]['geometry']['coordinates'],
-        emissions[data['features'][item]['propertise']['name']],
-      ])
-      position.push(data['features'][item]['geometry']['coordinates'])
+        data["features"][item]["propertise"]["name"],
+        data["features"][item]["geometry"]["coordinates"],
+        emissions[data["features"][item]["propertise"]["name"]],
+      ]);
+      position.push(data["features"][item]["geometry"]["coordinates"]);
 
-      let b = 655 //两条直角边
-      let a = 830
+      let b = 655; //两条直角边
+      let a = 830;
       //y = 36.4/59.52*x + 15.17 - 36.4/59.52 * 73.7
-      let k = 36.4 / 59.52
-      let m = 15.17 - 36.4 / 59.52 * 73.7
-      let xiebian = Math.pow(Math.pow(a, 2) + Math.pow(b, 2), 1 / 2)
-      let jidi = [a / xiebian, b / xiebian]
-      let position_ = this.reverseMatrix(position)
-      position_ = this.get_position(jidi, position_)
-      let line_length = Math.pow(Math.pow(133.22 - 73.70, 2) + Math.pow(51.57 - 15.17, 2), 1 / 2)
+      let k = 36.4 / 59.52;
+      let m = 15.17 - (36.4 / 59.52) * 73.7;
+      let xiebian = Math.pow(Math.pow(a, 2) + Math.pow(b, 2), 1 / 2);
+      let jidi = [a / xiebian, b / xiebian];
+      let position_ = this.reverseMatrix(position);
+      position_ = this.get_position(jidi, position_);
+      let line_length = Math.pow(
+        Math.pow(133.22 - 73.7, 2) + Math.pow(51.57 - 15.17, 2),
+        1 / 2
+      );
 
-      let path_1 = []
-      let i = 73.70
+      let path_1 = [];
+      let i = 73.7;
       while (i < 133.22) {
-        let sum = 0
+        let sum = 0;
         for (let j = 0; j < dataset.length; j++) {
-          let lng = position[j][0]
-          let lat = position[j][1]
-          if (k * lng + m > lat) continue
-          let value = dataset[j][2]
-          let sigma = σ * 10.05
-          sum += f(sigma, i, lng, value)
+          let lng = position[j][0];
+          let lat = position[j][1];
+          if (k * lng + m > lat) continue;
+          let value = dataset[j][2];
+          let sigma = σ * 10.05;
+          sum += f(sigma, i, lng, value);
         }
-        path_1.push([i, sum])
-        i += 0.1
+        path_1.push([i, sum]);
+        i += 0.1;
       }
-      let path_2 = []
-      i = 73.70
+      let path_2 = [];
+      i = 73.7;
       while (i < 133.22) {
-        let sum = 0
+        let sum = 0;
         for (let j = 0; j < dataset.length; j++) {
-          let lng = position[j][0]
-          let lat = position[j][1]
-          if (k * lng + m <= lat) continue
-          let value = dataset[j][2]
-          let sigma = σ * 10.05
-          sum += f(sigma, i, lng, value)
+          let lng = position[j][0];
+          let lat = position[j][1];
+          if (k * lng + m <= lat) continue;
+          let value = dataset[j][2];
+          let sigma = σ * 10.05;
+          sum += f(sigma, i, lng, value);
         }
-        path_2.push([i, sum])
-        i += 0.1
+        path_2.push([i, sum]);
+        i += 0.1;
       }
-      let path_3 = []
-      let path_4 = []
+      let path_3 = [];
+      let path_4 = [];
       for (i = 0; i < path_1.length; i++) {
-        path_3.push([path_1[i][0], path_1[i][1] + path_2[i][1]])
-        path_4.push([path_1[i][0], path_1[i][1] - path_2[i][1]])
+        path_3.push([path_1[i][0], path_1[i][1] + path_2[i][1]]);
+        path_4.push([path_1[i][0], path_1[i][1] - path_2[i][1]]);
       }
-      let max1 = d3.max(path_1, d => d[1])
-      let min1 = d3.min(path_1, d => d[1])
-      let max2 = d3.max(path_2, d => d[1])
-      let min2 = d3.min(path_2, d => d[1])
-      let max3 = d3.max(path_3, d => d[1])
-      let min3 = d3.min(path_3, d => d[1])
-      let max4 = d3.max(path_4, d => d[1])
-      let min4 = d3.min(path_4, d => d[1])
-      let max = Math.max(max1, max2)
-      let min = Math.min(min1, min2)
-      let line1 = d3.line()
-        .x(d => (d[0] - 73.70) / (133.22 - 73.70) * xiebian)
-        .y(d => -(d[1] - min) / (max - min) * 100)
-        .curve(d3.curveMonotoneX)
-      let line2 = d3.line()
-        .x(d => (d[0] - 73.70) / (133.22 - 73.70) * xiebian)
-        .y(d => (d[1] - min) / (max - min) * 100)
-        .curve(d3.curveMonotoneX)
-      let line3 = d3.line()
-        .x(d => (d[0] - 73.70) / (133.22 - 73.70) * xiebian)
-        .y(d => -d[1] / max3 * 80)
-        .curve(d3.curveMonotoneX)
-      let line4 = d3.line()
-        .x(d => (d[0] - 73.70) / (133.22 - 73.70) * xiebian)
-        .y(d => -d[1] / max4 * 10)
-        .curve(d3.curveMonotoneX)
+      let max1 = d3.max(path_1, (d) => d[1]);
+      let min1 = d3.min(path_1, (d) => d[1]);
+      let max2 = d3.max(path_2, (d) => d[1]);
+      let min2 = d3.min(path_2, (d) => d[1]);
+      let max3 = d3.max(path_3, (d) => d[1]);
+      let min3 = d3.min(path_3, (d) => d[1]);
+      let max4 = d3.max(path_4, (d) => d[1]);
+      let min4 = d3.min(path_4, (d) => d[1]);
+      let max = Math.max(max1, max2);
+      let min = Math.min(min1, min2);
+      let line1 = d3
+        .line()
+        .x((d) => ((d[0] - 73.7) / (133.22 - 73.7)) * xiebian)
+        .y((d) => (-(d[1] - min) / (max - min)) * 100)
+        .curve(d3.curveMonotoneX);
+      let line2 = d3
+        .line()
+        .x((d) => ((d[0] - 73.7) / (133.22 - 73.7)) * xiebian)
+        .y((d) => ((d[1] - min) / (max - min)) * 100)
+        .curve(d3.curveMonotoneX);
+      let line3 = d3
+        .line()
+        .x((d) => ((d[0] - 73.7) / (133.22 - 73.7)) * xiebian)
+        .y((d) => (-d[1] / max3) * 80)
+        .curve(d3.curveMonotoneX);
+      let line4 = d3
+        .line()
+        .x((d) => ((d[0] - 73.7) / (133.22 - 73.7)) * xiebian)
+        .y((d) => (-d[1] / max4) * 10)
+        .curve(d3.curveMonotoneX);
       // line1 = d3.line()
       //     .x(d => d[0] * xiebian)
       //     .y(d => -(d[1] - min) / (max - min) * 100)
@@ -520,80 +579,132 @@ export default class NMap extends React.Component {
       //     .x(d => d[0] * xiebian)
       //     .y(d => (d[1] - min) / (max - min) * 100)
 
-      svg.append('path').attr('class', 'Path') //.transition().duration(500)
-        .attr('d', line1(path_1))
-        .attr('fill', 'none')
-        .attr('fill-opacity', 0.3)
-        .attr('stroke', 'steelblue')
-        .attr('stroke-width', 2)
-        .attr('stroke-opacity', 0.7)
-        .attr('transform', function () {
-          let x = -(xiebian - a) * (a / xiebian) * 1.15
-          let y = (xiebian - a) * (b / xiebian) * 1.15
+      svg
+        .append("path")
+        .attr("class", "Path") //.transition().duration(500)
+        .attr("d", line1(path_1))
+        .attr("fill", "none")
+        .attr("fill-opacity", 0.3)
+        .attr("stroke", "steelblue")
+        .attr("stroke-width", 2)
+        .attr("stroke-opacity", 0.7)
+        .attr("transform", function () {
+          let x = -(xiebian - a) * (a / xiebian) * 1.15;
+          let y = (xiebian - a) * (b / xiebian) * 1.15;
           // console.log(x, y, xiebian)
-          let roll = -Math.atan(b / a) * 180 / Math.PI
-          return 'translate(' + x + ',' + y + ')' + 'rotate(' + end_angle + ',' + width + ',0)' // + 'translate(' + x + ',' + y + ')'
-        })
-      svg.append('path').attr('class', 'Path2')
-        .attr('d', line2(path_2))
-        .attr('fill', 'none')
-        .attr('fill-opacity', 0.3)
-        .attr('stroke', 'darkorange')
-        .attr('stroke-width', 2)
-        .attr('stroke-opacity', 0.7)
-        .attr('transform', function () {
-          let x = -(xiebian - a) * (a / xiebian) * 1.15
-          let y = (xiebian - a) * (b / xiebian) * 1.15
+          let roll = (-Math.atan(b / a) * 180) / Math.PI;
+          return (
+            "translate(" +
+            x +
+            "," +
+            y +
+            ")" +
+            "rotate(" +
+            end_angle +
+            "," +
+            width +
+            ",0)"
+          ); // + 'translate(' + x + ',' + y + ')'
+        });
+      svg
+        .append("path")
+        .attr("class", "Path2")
+        .attr("d", line2(path_2))
+        .attr("fill", "none")
+        .attr("fill-opacity", 0.3)
+        .attr("stroke", "darkorange")
+        .attr("stroke-width", 2)
+        .attr("stroke-opacity", 0.7)
+        .attr("transform", function () {
+          let x = -(xiebian - a) * (a / xiebian) * 1.15;
+          let y = (xiebian - a) * (b / xiebian) * 1.15;
           // console.log(x, y, xiebian)
-          let roll = -Math.atan(b / a) * 180 / Math.PI
-          return 'translate(' + x + ',' + y + ')' + 'rotate(' + end_angle + ',' + width + ',0)' // + 'translate(' + x + ',' + y + ')'
-        })
-      svg.append('path').attr('class', 'Path3')
-        .attr('d', line3(path_3))
-        .attr('opacity', 0)
-        .attr('fill', '#87CEFA')
-        .attr('fill-opacity', 0.8)
-        .attr('stroke', '#87CEFA')
-        .attr('stroke-width', 2)
-        .attr('stroke-opacity', 1)
-        .attr('transform', function () {
-          let x = -(xiebian - a) * (a / xiebian) * 1.15
-          let y = (xiebian - a) * (b / xiebian) * 1.15
+          let roll = (-Math.atan(b / a) * 180) / Math.PI;
+          return (
+            "translate(" +
+            x +
+            "," +
+            y +
+            ")" +
+            "rotate(" +
+            end_angle +
+            "," +
+            width +
+            ",0)"
+          ); // + 'translate(' + x + ',' + y + ')'
+        });
+      svg
+        .append("path")
+        .attr("class", "Path3")
+        .attr("d", line3(path_3))
+        .attr("opacity", 0)
+        .attr("fill", "#87CEFA")
+        .attr("fill-opacity", 0.8)
+        .attr("stroke", "#87CEFA")
+        .attr("stroke-width", 2)
+        .attr("stroke-opacity", 1)
+        .attr("transform", function () {
+          let x = -(xiebian - a) * (a / xiebian) * 1.15;
+          let y = (xiebian - a) * (b / xiebian) * 1.15;
           // console.log(x, y, xiebian)
-          let roll = -Math.atan(b / a) * 180 / Math.PI
-          return 'translate(' + x + ',' + y + ')' + 'rotate(' + end_angle + ',' + width + ',0)' // + 'translate(' + x + ',' + y + ')'
-        })
-      svg.append('path').attr('class', 'Path4')
-        .attr('d', line4(path_4))
-        .attr('opacity', 0)
-        .attr('fill', '#EE3B3B')
-        .attr('fill-opacity', 0.8)
-        .attr('stroke', '#EE3B3B')
-        .attr('stroke-width', 2)
-        .attr('stroke-opacity', 1)
-        .attr('transform', function () {
-          let x = -(xiebian - a) * (a / xiebian) * 1.15
-          let y = (xiebian - a) * (b / xiebian) * 1.15
+          let roll = (-Math.atan(b / a) * 180) / Math.PI;
+          return (
+            "translate(" +
+            x +
+            "," +
+            y +
+            ")" +
+            "rotate(" +
+            end_angle +
+            "," +
+            width +
+            ",0)"
+          ); // + 'translate(' + x + ',' + y + ')'
+        });
+      svg
+        .append("path")
+        .attr("class", "Path4")
+        .attr("d", line4(path_4))
+        .attr("opacity", 0)
+        .attr("fill", "#EE3B3B")
+        .attr("fill-opacity", 0.8)
+        .attr("stroke", "#EE3B3B")
+        .attr("stroke-width", 2)
+        .attr("stroke-opacity", 1)
+        .attr("transform", function () {
+          let x = -(xiebian - a) * (a / xiebian) * 1.15;
+          let y = (xiebian - a) * (b / xiebian) * 1.15;
           // console.log(x, y, xiebian)
-          let roll = -Math.atan(b / a) * 180 / Math.PI
-          return 'translate(' + x + ',' + y + ')' + 'rotate(' + end_angle + ',' + width + ',0)' // + 'translate(' + x + ',' + y + ')'
-        })
-      d3.select('.Line').remove()
+          let roll = (-Math.atan(b / a) * 180) / Math.PI;
+          return (
+            "translate(" +
+            x +
+            "," +
+            y +
+            ")" +
+            "rotate(" +
+            end_angle +
+            "," +
+            width +
+            ",0)"
+          ); // + 'translate(' + x + ',' + y + ')'
+        });
+      d3.select(".Line").remove();
     }
-  }
+  };
   get_position = (a, matrix) => {
-    let result = []
+    let result = [];
     for (let i = 0; i < matrix[0].length; i++) {
-      let x = 0
+      let x = 0;
       for (let j = 0; j < matrix.length; j++) {
         // x += Math.abs(matrix[j][i] * a[j])
-        x += matrix[j][i] * a[j]
+        x += matrix[j][i] * a[j];
       }
-      result.push(x)
+      result.push(x);
       // result.push(Math.abs(x))
     }
-    return result
-  }
+    return result;
+  };
   reverseMatrix = (sourceArr) => {
     let reversedArr = [];
     for (let n = 0; n < sourceArr[0].length; n++) {
