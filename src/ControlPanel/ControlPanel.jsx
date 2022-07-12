@@ -1,9 +1,11 @@
 import React from "react";
 import "./ControlPanel.css";
 import Heading from "../Heading/Heading.jsx";
+import NMap from "../Map/Map";
 
 import { Button, Row, Col, Slider, InputNumber, Select, Switch, Input } from "antd";
 import "antd/dist/antd.css";
+import { ArrowUpOutlined, ArrowDownOutlined, ArrowLeftOutlined, ArrowRightOutlined, PoweroffOutlined, ReloadOutlined, CloseOutlined } from '@ant-design/icons';
 const { Option } = Select;
 
 export default class ControlPanel extends React.Component {
@@ -137,10 +139,42 @@ export default class ControlPanel extends React.Component {
           </Col>
         </Row>
         <Row style={{ marginTop: 10, marginLeft: 5 }}>
-          <Col span={12}>
+          <Col span={9}>
             <Button type="dashed">Projection Axis:</Button>
           </Col>
-          <Col span={6}></Col>
+          <Col span={2}>
+            <Button type="" class='run' icon={<ArrowUpOutlined />}
+              onclick="upLine()">
+            </Button>
+          </Col>
+          <Col span={2}>
+            <Button type="" class='run' icon={<ArrowDownOutlined />}
+              onclick="downLine()">
+            </Button>
+          </Col>
+          <Col span={2}>
+            <Button type="" class='run' onclick="" icon={<ArrowLeftOutlined />}>
+            </Button>
+          </Col>
+          <Col span={2}>
+            <Button type="" class='run' onclick="" icon={<ArrowRightOutlined />}>
+            </Button>
+          </Col>
+          <Col span={2}>
+            <Button type="" class='run' icon={<PoweroffOutlined />}
+              onClick={this.drawLine}>
+            </Button>
+          </Col>
+          <Col span={2}>
+            <Button type="" class='run' icon={<ReloadOutlined />}
+              onclick="clockwise2(1)">
+            </Button>
+          </Col>
+          <Col span={1}>
+            <Button type="" class='run' icon={<CloseOutlined />}
+              onclick="">
+            </Button>
+          </Col>
         </Row>
       </div>
     );
@@ -171,5 +205,14 @@ export default class ControlPanel extends React.Component {
   };
   changeScale = (Scale) => {
     this.setState({ Scale: Scale });
+  }
+  drawLine = () => {
+    this.setState({ DrawLine: false })
+    this.props.callback({
+      Year: this.state.Year,
+      Province: this.state.Province,
+      Pattern: this.state.Pattern,
+      DrawLine: false
+    })
   }
 }

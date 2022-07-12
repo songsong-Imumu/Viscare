@@ -101,7 +101,7 @@ export default class Sunburst extends React.Component {
       "#bcbd22",
       "#17becf",
     ],
-    colors: d3.schemeSet2,
+    colors: d3.schemeTableau10,
     provinces: [
       "Beijing",
       "Tianjin",
@@ -140,10 +140,12 @@ export default class Sunburst extends React.Component {
   };
   componentDidMount() { }
   componentWillUnmount() {
-    this.drawSunburst();
+    const { Year, Cluster } = this.props;
+    this.drawSunburst(Year, Cluster);
   }
   componentDidUpdate() {
-    this.drawSunburst();
+    const { Year, Cluster } = this.props;
+    this.drawSunburst(Year, Cluster);
   }
   render() {
     return (
@@ -153,8 +155,9 @@ export default class Sunburst extends React.Component {
       </div>
     );
   }
-  drawSunburst = () => {
-    const { Year } = this.props;
+  drawSunburst = (Year, Cluster) => {
+    // console.log(Year, Cluster)
+
     const { clusters, colors, provinces, width, height, radius, clusterColors } = this.state;
     const scale = d3.scaleLinear().domain([1998, 2017]).range([0, 19]);
     const index = scale(Year);
@@ -203,10 +206,10 @@ export default class Sunburst extends React.Component {
       name: "Root",
       children: dataset,
     };
-    this.D3_Sunburst_Zoomable(dataset, width, height, clusterColors, radius, colors);
+    this.D3_Sunburst_Zoomable(dataset, width, height, clusterColors, radius, colors, Cluster);
   };
 
-  D3_Sunburst_Zoomable = (data, width, height, color, radius, colors) => {
+  D3_Sunburst_Zoomable = (data, width, height, color, radius, colors, Cluster) => {
     let format = d3.format(",d");
     let arc = d3
       .arc()
@@ -273,11 +276,18 @@ export default class Sunburst extends React.Component {
         else if (d.data.name === "Process") return colors[3]
         return color[d.data.cluster];
       })
+      .attr('fill-color', (d) => {
+        if (d.data.name === "Raw Coal") return colors[0]
+        else if (d.data.name === "Crude Oil") return colors[1]
+        else if (d.data.name === "Natural Gas") return colors[2]
+        else if (d.data.name === "Process") return colors[3]
+        return color[d.data.cluster];
+      })
       .attr("fill-opacity", (d) =>
         arcVisible(d.current) ? (d.children ? 0.6 : 0.4) : 0
       )
       .attr("pointer-events", (d) => (arcVisible(d.current) ? "auto" : "none"))
-
+      .attr('class', 'sunburst_path')
       .attr("d", (d) => arc(d.current));
 
     path
@@ -315,7 +325,20 @@ export default class Sunburst extends React.Component {
       .attr("pointer-events", "all")
       .on("click", clicked);
 
+
+    d3.selectAll('.sunburst_path')
+      .attr('stroke-width', d => {
+        // console.log(d, Cluster)
+        if (d.data.name === Cluster) {
+          let event = 0;
+          clicked(event, d)
+        }
+        return 0
+      })
+
+
     function clicked(event, p) {
+      console.log(p)
       parent.datum(p.parent || root);
 
       root.each(

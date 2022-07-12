@@ -1,70 +1,56 @@
-# Getting Started with Create React App
+# Control Panel
+目前只有年份滑动轴和模式的下拉框能交互。
+拖动年份会改变所有视图；改变模式下拉框（Provinces/Areas）可以切换地图的两个模式。
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# Network View
+显示某年30省份之间的地理加权碳差异图网络。
+节点大小映射碳排放量。节点颜色映射聚类。
+鼠标悬浮节点看到省份名称
+# Sunburst View
+显示某年30个省份的聚类情况以及省份的碳排放组成。
+点击“Cluster_1”,“Shanxi”等可以下钻一层。
+点击中间空白圆圈可以回到上一层
+# Map View
+Provinces模式：由红蓝两色显示碳排放量。红色表示高于各省份碳排放量均值。蓝色表示低于各省份碳排放均值。红色越深碳排放量越高。蓝色越深碳排放量越低
+Areas模式：
+映射聚类结果
+# TreeMap View
+类内省份碳排放组成的加和平均。
+在Parallel View中选择某一个矩形块，会改变TreeMap View。
+# Parallel View
+30省份20年的聚类变化。
+点击矩阵块可以控制全局的年份选择（改变所有视图）和聚类选择（改变TreeMap View）
+点击单条线可以看清该省份的聚类变化情况。
+鼠标悬浮在线上可以看到省份名称。
 
-## Available Scripts
-
-In the project directory, you can run:
-
-### `npm start`
-
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
-
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
-
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+由于Parallel View中的线没有与地图之间做交互，不易于通过省份选择线，所以将线从上到下的顺序给出：
+上海
+江苏
+浙江
+安徽
+福建
+江西
+山东
+湖北
+河南
+广东
+海南
+湖南
+广西
+重庆
+贵州
+云南
+四川
+山西
+河北
+辽宁
+内蒙古
+吉林
+黑龙江
+北京
+天津
+陕西
+甘肃
+青海
+宁夏
+新疆

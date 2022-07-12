@@ -34,6 +34,7 @@ export default class TreeMap extends React.Component {
       dataset.push(data[Year][d])
     })
     let result = this.treeSum(dataset)
+    // console.log(result)
     dataset = result
     for (let i = 0; i < 4; i++) {
       let d = dataset.children[i].children;
@@ -103,7 +104,7 @@ export default class TreeMap extends React.Component {
       paddingBottom = paddingOuter, // to separate a node’s bottom edge from its children
       paddingLeft = paddingOuter, // to separate a node’s left edge from its children
       round = true, // whether to round to exact pixels
-      colors = d3.schemeSet2, // array of colors
+      colors = d3.schemeTableau10, // array of colors
       zDomain, // array of values for the color scale
       fill = "#ccc", // fill for node rects (if no group color encoding)
       fillOpacity = group == null ? null : 0.6, // fill opacity for node rects
@@ -173,7 +174,6 @@ export default class TreeMap extends React.Component {
       .attr("font-family", "sans-serif")
       .attr("font-size", 16)
     // .attr("transform", "translate(0,10)");
-
     svg.selectAll('.c_Legend_text').data(['Raw Coal', 'Crude Oil', 'Natural Gas', 'Process']).enter().append('text').attr('class', 'c_Legend_text')
       .attr('x', (_, i) => i * 90 + 140)
       .attr('y', -15)
@@ -188,7 +188,7 @@ export default class TreeMap extends React.Component {
       .attr('ry', 2)
       .attr('index', (_, i) => i)
       .attr('fill', (_, i) => colors[i])
-      .attr('opacity', 0.6)
+      .attr('opacity', 0.9)
 
     const g = svg.append('g').attr('transform', 'translate(0,10)')
     const node = g
@@ -206,7 +206,7 @@ export default class TreeMap extends React.Component {
         let index = ['Raw Coal', 'Crude Oil', 'Natural Gas', 'Process'].indexOf(d.parent.data.name)
         return colors[index]
       })
-      .attr("fill-opacity", fillOpacity)
+      .attr("fill-opacity", 0.9)
       .attr("stroke", stroke)
       .attr("stroke-width", strokeWidth)
       .attr("stroke-opacity", strokeOpacity)
@@ -229,27 +229,34 @@ export default class TreeMap extends React.Component {
         .attr("width", (d) => d.x1 - d.x0)
         .attr("height", (d) => d.y1 - d.y0);
 
-      node
-        .append("text")
-        // .attr(
-        //   "clip-path",
-        //   (d, i) => `url(${new URL(`#${uid}-clip-${i}`, location)})`
-        // )
-        .selectAll("tspan")
-        .data((d, i) => `${L[i]}`.split(/\n/g))
-        .join("tspan")
-        .attr("x", 3)
-        .attr(
-          "y",
-          (d, i, D) => `${(i === D.length - 1) * 0.3 + 1.1 + i * 0.9}em`
-        )
-        .attr("fill-opacity", (d, i, D) => {
-          // console.log(d, i, D);
-          return i === D.length - 1 ? 0.7 : null;
-        })
-        .text((d) => {
-          return d;
-        });
+      // node
+      //   .append("text")
+      //   .selectAll("tspan")
+      //   .data((d, i) => `${L[i]}`.split(/\n/g))
+      //   .join("tspan")
+      //   .attr("x", 3)
+      //   .attr(
+      //     "y",
+      //     (d, i, D) => `${(i === D.length - 1) * 0.3 + 1.1 + i * 0.9}em`
+      //   )
+      //   .attr("fill-opacity", (d, i, D) => {
+      //     return i === D.length - 1 ? 0.7 : null;
+      //   })
+      //   .text((d) => {
+      //     console.log(d)
+      //     return d.x1 - d.x0 <= 10 ? '' : d
+      //   });
+      node.append('text')
+        .attr('x', 3)
+        .attr('y', 15)
+        .text(d => d.x1 - d.x0 <= 70 ? '' : d.data.name === 'Move out (-)' ? 'Move out' : d.data.name.substring(0, 10))
+
+      node.append('text')
+        .attr('x', 2)
+        .attr('y', 35)
+        .text(d => d.x1 - d.x0 <= 70 ? "" : d.value.toFixed(2))
+
+
     }
 
     return Object.assign(svg.node(), { scales: { color } });
@@ -262,10 +269,11 @@ export default class TreeMap extends React.Component {
     let process_children = 0
     for (let i = 0; i < data.length; i++) {
       const rootChildren = data[i].children
-      const Raw_Coal_Children = rootChildren[0].children
-      const Crude_Oil_Children = rootChildren[1].children
-      const Natural_Gas_Children = rootChildren[3].children
+      const Raw_Coal_Children = rootChildren[3].children
+      const Crude_Oil_Children = rootChildren[0].children
+      const Natural_Gas_Children = rootChildren[1].children
       const Process_Children = rootChildren[2].children
+      // console.log(rootChildren[0], rootChildren[1], rootChildren[2], rootChildren[3])
       for (let j = 0; j < 8; j++) {
         raw_children[j] += Raw_Coal_Children[j].value
         crude_children[j] += Crude_Oil_Children[j].value
@@ -273,6 +281,12 @@ export default class TreeMap extends React.Component {
       }
       process_children += Process_Children[0].value
     }
+    for (let j = 0; j < 8; j++) {
+      raw_children[j] = raw_children[j] / data.length
+      crude_children[j] = crude_children[j] / data.length
+      natural_children[j] = natural_children[j] / data.length
+    }
+    process_children = process_children / data.length
     return {
       'name': '',
       'children': [

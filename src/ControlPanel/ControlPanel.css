@@ -5,3 +5,14 @@
   width: 400px;
   height: 250px;
 }
+.run {
+  height: 25px;
+  width: 25px;
+  margin-top: 5px;
+  border: 0px solid lightgray;
+  background-color: rgba(255, 255, 255, 0);
+  /* opacity: 0%; */
+  outline: none;
+  /* margin-top: 2px; */
+  cursor: pointer;
+}

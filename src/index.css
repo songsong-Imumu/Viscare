@@ -17,6 +17,12 @@
   display: none !important;
 }
 
+#mapdiv {
+  position: absolute;
+  width: 830px;
+  height: 655px;
+  pointer-events: none;
+}
 /* button {
   width: 24px;
   height: 24px;

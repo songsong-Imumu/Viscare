@@ -220,11 +220,14 @@ export default class Network extends React.Component {
     // console.log(nodes, edges);
     const link = svg
       .append("g")
-      .attr("stroke", "lightgray")
-      .attr("stroke-width", 1)
+      .attr("stroke", "darkgray")
       .selectAll("line")
       .data(edges)
-      .join("line");
+      .join("line")
+      .attr("stroke-width", d => {
+        return 1 + 2 * d.value
+      }).attr("stoke-opacity", d => d.value)
+
 
     const node = svg
       .append("g")

@@ -691,8 +691,12 @@ export default class Parallel extends React.Component {
       .attr('opacity', 0.9)
       .attr("transform", "translate(30,-10)")
       .on('click', (e, d) => {
+        // console.log(e, d)
         let index = e.currentTarget.getAttribute("index")
         let array = matrix_2D[index]
+        // console.log(array)
+        // console.log(this.props.Year)
+        // console.log(matrix_3D[this.props.Year - 1998].indexOf(array))
         let Year = e.currentTarget.getAttribute('yearCount')
 
         d3.selectAll('.paths')
@@ -701,10 +705,11 @@ export default class Parallel extends React.Component {
             return 0.2
           })
           .attr('stroke-width', (_, i) => {
-            if (array.indexOf(i) !== -1) return 2
+            if (array.indexOf(i) !== -1) return 3
             return 1.5
           })
-        this.props.callback({ Year: parseInt(Year) + 1998, Province_Array: array })
+        // console.log(this.state.Cluster[index])
+        this.props.callback({ Year: parseInt(Year) + 1998, Province_Array: array, Cluster: `Cluster_${this.state.Cluster[index] + 1}` })
       });
 
     let array = Province_Array
@@ -715,7 +720,7 @@ export default class Parallel extends React.Component {
         return 0.2
       })
       .attr('stroke-width', (_, i) => {
-        if (array.indexOf(i) !== -1) return 2
+        if (array.indexOf(i) !== -1) return 3
         return 1.5
       })
   };

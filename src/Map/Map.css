@@ -6,6 +6,13 @@
   height: 655px;
 }
 
+#MAP_LINE {
+  position: absolute;
+  width: 830px;
+  height: 655px;
+  pointer-events: none;
+}
+
 #mapsvg {
   position: absolute;
   /* left: 410px; */
