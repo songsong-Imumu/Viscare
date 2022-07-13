@@ -292,7 +292,12 @@ export default class NMap extends React.Component {
     let province_expression = ["match", ["get", "name"]];
     // province_expression.push(Province, "rgb(255,255,0)");
     // province_expression.push("rgba(0,0,0,0)");
-    color_expression.push("#AAAAAA");
+    color_expression.push("rgba(0,0,0,0)");
+    province_expression.push("Tibet", "rgba(0,0,0,0.2)");
+    province_expression.push("Hong Kong", "rgba(0,0,0,0.2)");
+    province_expression.push("Taiwan", "rgba(0,0,0,0.2)");
+    province_expression.push("Macao", "rgba(0,0,0,0.2)");
+    province_expression.push("rgba(0,0,0,0)");
     map.on("load", () => {
       map.addSource("China", {
         type: "geojson",
@@ -371,11 +376,15 @@ export default class NMap extends React.Component {
         }
       }
       expression.push(0.5);
-      color_expression.push("#AAAAAA");
+      color_expression.push("rgba(0,0,0,0)");
       let province_expression = ["match", ["get", "name"]];
       province_expression.push(Province, "rgb(255,255,0)");
       console.log(province_expression);
       province_expression.push("rgba(0,0,0,0)");
+      province_expression.push("Hong Kong", "rgba(0,0,0,0.5)");
+      province_expression.push("Tibet", "rgba(0,0,0,0.5)");
+      province_expression.push("Taiwan", "rgba(0,0,0,0.5)");
+      province_expression.push("Macao", "rgba(0,0,0,0.5)");
       if (map.getLayer("fill")) {
         map.removeLayer("fill");
         map.removeLayer("border");
@@ -409,7 +418,7 @@ export default class NMap extends React.Component {
       for (let i = 0; i < 30; i++) {
         expression.push(provinces[i], clustersColors[cluster[i]]);
       }
-      expression.push("#AAAAAA");
+      expression.push("rgba(0,0,0,0)");
       if (map.getLayer("fill")) {
         map.removeLayer("fill");
         map.addLayer({

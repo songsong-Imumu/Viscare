@@ -27,3 +27,4 @@ Areas模式：
 在项目目录下运行npm install
 # 项目启动
 在项目目录下运行npm start
+访问localhost:3000
