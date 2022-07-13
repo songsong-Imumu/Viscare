@@ -72,6 +72,7 @@ export default class Root extends React.Component {
         Year: Year,
         Province_Array: Province_Array,
         Cluster: Cluster,
+        Province: ''
       });
     } else {
       this.setState({

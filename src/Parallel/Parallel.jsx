@@ -338,7 +338,7 @@ export default class Parallel extends React.Component {
     Province_Array: new Array(30).fill(0).map((_, i) => i),
     Province: "Beijing",
   };
-  componentDidMount() {}
+  componentDidMount() { }
   componentWillUnmount() {
     this.drawParallel();
     // this.draw_P_Legend();
@@ -607,14 +607,6 @@ export default class Parallel extends React.Component {
         // })
         // highlightMap2([provinces[i]]);
       });
-    let p = this.props.Province;
-    d3.selectAll(".paths")
-      .transition()
-      .duration(500)
-      .attr("opacity", (d) => {
-        if (p === "") return 1;
-        return d.name === p ? 1 : 0.2;
-      });
 
     count = -1;
     let y_count = 0;
@@ -736,18 +728,35 @@ export default class Parallel extends React.Component {
       });
 
     let array = Province_Array;
+    let p = this.props.Province;
+    if (this.props.Province === '') {
+      d3.selectAll(".paths")
+        .transition()
+        .duration(500)
+        .attr("opacity", (_, i) => {
+          if (array.indexOf(i) !== -1) {
+            return 0.8;
+          }
+          return 0.2;
+        })
+        .attr("stroke-width", (_, i) => {
+          if (array.indexOf(i) !== -1) return 3;
+          return 1.5;
+        });
+    } else {
+      d3.selectAll(".paths")
+        .transition()
+        .duration(500)
+        .attr("opacity", (d) => {
+          if (p === "") return 1;
+          return d.name === p ? 1 : 0.2;
+        })
+        .attr("stroke-width", (d) => {
+          if (p === "") return 1.5;
+          return d.name === p ? 3 : 1.5;
+        })
+    }
 
-    d3.selectAll(".paths")
-      .attr("opacity", (_, i) => {
-        if (array.indexOf(i) !== -1) {
-          return 0.8;
-        }
-        return 0.2;
-      })
-      .attr("stroke-width", (_, i) => {
-        if (array.indexOf(i) !== -1) return 3;
-        return 1.5;
-      });
   };
 
   highlightlines = (e, d, matrix_2D) => {
