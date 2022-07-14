@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/Viscare/static/css/main.c75d3b66.css",
+    "main.js": "/Viscare/static/js/main.7dffcb77.js",
+    "index.html": "/Viscare/index.html",
+    "main.c75d3b66.css.map": "/Viscare/static/css/main.c75d3b66.css.map",
+    "main.7dffcb77.js.map": "/Viscare/static/js/main.7dffcb77.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.c75d3b66.css",
+    "static/js/main.7dffcb77.js"
+  ]
+}
